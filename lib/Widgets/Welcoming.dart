@@ -27,7 +27,7 @@ class Welcoming extends StatelessWidget{
         ,
         width: 350,
         height: 150,
-        child: Center( child: 
+        child: const Center(child: 
         Text(
           "Welcome {Normal User},",
           style: TextStyle(
