@@ -78,7 +78,7 @@ class Widgetmain extends StatelessWidget {
       margin: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: const Color(0xA30B6725),
+        color: const Color(0xFF179C3D),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
