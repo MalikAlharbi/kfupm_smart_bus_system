@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kfupm_smart_bus_system/Widgets/Welcoming.dart';
 
 class Widgetmain extends StatelessWidget {
-  const Widgetmain({Key? key}) : super(key: key);
+  const Widgetmain({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +13,12 @@ class Widgetmain extends StatelessWidget {
       ),
       home: Scaffold(
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                _buildTopBar(),
-                _buildMainContent(),
-              ],
-            ),
+          child: Column(
+            children: [
+              _buildTopBar(),
+              _buildMainContent(),
+              _buildBottomBar(),
+            ],
           ),
         ),
       ),
@@ -28,7 +27,7 @@ class Widgetmain extends StatelessWidget {
 
   Widget _buildTopBar() {
     return Container(
-      margin: const EdgeInsets.all(16.0),
+      margin: const EdgeInsets.all(5.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: const Color(0xFF179C3D),
@@ -120,7 +119,6 @@ class Widgetmain extends StatelessWidget {
       crossAxisSpacing: 16,
       mainAxisSpacing: 16,
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
       children: children,
     );
   }
@@ -129,7 +127,7 @@ class Widgetmain extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(40),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -151,6 +149,41 @@ class Widgetmain extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildBottomBar() {
+    return Container(
+      margin: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: const Color(0xFF179C3D),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Row(
+          children: [
+            _buildIconButton(Icons.directions_bus, () {
+              print("Profile tapped");
+            }),
+            const Spacer(),
+            _buildIconButton(Icons.home, () {
+              print("home");
+            }),
+            const Spacer(),
+            _buildIconButton(Icons.logout, () {
+              print("Call tapped");
+            }),
+          ],
+        ),
       ),
     );
   }
