@@ -9,8 +9,7 @@ class Welcoming extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage(
-              'https://cpg.kfupm.edu.sa/wp-content/uploads/2017/01/banner1.jpg'),
+          image: const AssetImage('assets/images/banner1.jpg'),
           fit: BoxFit.cover,
           colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.55), BlendMode.darken),

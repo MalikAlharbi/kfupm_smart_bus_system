@@ -47,8 +47,8 @@ class Widgetmain extends StatelessWidget {
               print("Profile tapped");
             }),
             const Spacer(),
-            Image.network(
-              'https://upload.wikimedia.org/wikipedia/ar/archive/3/37/20180719130502%21King_Fahd_University_of_Petroleum_%26_Minerals_Logo.png',
+            const Image(
+              image: AssetImage("assets/images/kfupm_logo.png"),
               width: 57,
             ),
             const Spacer(),
