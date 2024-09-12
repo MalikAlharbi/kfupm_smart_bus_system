@@ -1,28 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kfupm_smart_bus_system/Widgets/Welcoming.dart';
+import 'package:kfupm_smart_bus_system/widgets/welcoming.dart';
 
 class Widgetmain extends StatelessWidget {
   const Widgetmain({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primaryColor: const Color(0xFF179C3D),
-        scaffoldBackgroundColor: Colors.grey[100],
-      ),
-      home: Scaffold(
-        body: SafeArea(
-          child: Column(
-            children: [
-              _buildTopBar(),
-              _buildMainContent(),
-              _buildBottomBar(),
-            ],
-          ),
-        ),
-      ),
-    );
+    return _buildMainContent();
   }
 
   Widget _buildTopBar() {
