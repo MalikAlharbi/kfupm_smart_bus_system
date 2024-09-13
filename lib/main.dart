@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kfupm_smart_bus_system/screens/request_bus.dart';
 //import 'package:kfupm_smart_bus_system/Landscape.dart';
 import 'screens/widget_main.dart';
 import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
@@ -22,7 +23,9 @@ void main() {
         child: Column(
           children: [
             TopAppBar(),
-            Widgetmain(),
+            // Widgetmain(),
+            RequestBus(),
+            Spacer(),
             BottomBar(),
           ],
         ),
