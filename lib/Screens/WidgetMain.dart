@@ -73,41 +73,44 @@ class Widgetmain extends StatelessWidget {
   }
 
   Widget _buildMainContent() {
-    return Container(
-      margin: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: const Color(0xFF179C3D),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Welcoming(),
-            const SizedBox(height: 24),
-            _buildGridSection(
-              [
-                _buildGridItem("Track Buses", Icons.directions_bus),
-                _buildGridItem("Available Events", Icons.event),
-              ],
+    //added flexable widget, and set flexable fit to tight.
+    return Flexible(
+      fit: FlexFit.tight,
+      child: Container(
+        margin: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: const Color(0xFF179C3D),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
-            const SizedBox(height: 24),
-            _buildGridSection(
-              [
-                _buildGridItem("Feedback", Icons.feedback),
-                _buildGridItem("Report Problem", Icons.report_problem),
-              ],
-            ),
-            const SizedBox(height: 24),
           ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Welcoming(),
+              _buildGridSection(
+                [
+                  _buildGridItem("Track Buses", Icons.directions_bus),
+                  _buildGridItem("Available Events", Icons.event),
+                ],
+              ),
+              const SizedBox(height: 24),
+              _buildGridSection(
+                [
+                  _buildGridItem("Feedback", Icons.feedback),
+                  _buildGridItem("Report Problem", Icons.report_problem),
+                ],
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
         ),
       ),
     );
