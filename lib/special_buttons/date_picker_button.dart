@@ -27,13 +27,11 @@ class _DatePickerButtonState extends State<DatePickerButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
+      width: 220,
       child: ElevatedButton(
-      
         onPressed: () => _selectDate(context),
         style: ElevatedButton.styleFrom(
-          
-          backgroundColor: Colors.green,
+          backgroundColor: const Color(0xFF179C3D),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -49,7 +47,6 @@ class _DatePickerButtonState extends State<DatePickerButton> {
             const SizedBox(width: 8),
             Container(
               padding: const EdgeInsets.all(4),
-              
               child: const Icon(
                 Icons.date_range,
                 color: Color.fromARGB(255, 1, 1, 1),

@@ -18,19 +18,17 @@ class _TextFieldBusState extends State<TextFieldBus> {
     late TextEditingController controller;
     String text = '';
 
-  @override 
-  void initState(){
-    super.initState();
-    controller = TextEditingController();
-  }
+    @override
+    void initState() {
+      super.initState();
+      controller = TextEditingController();
+    }
 
-  @override
-  void dispose(){
-    super.dispose();
-    controller.dispose();
-    
-  }
-
+    @override
+    void dispose() {
+      super.dispose();
+      controller.dispose();
+    }
 
     // TODO: implement build
     return ClipRRect(
@@ -38,24 +36,25 @@ class _TextFieldBusState extends State<TextFieldBus> {
       child: Container(
         width: 300,
         height: 50,
-        color: Color.fromRGBO(56, 162, 86, 1),
+        color: const Color(0xFF179C3D),
         child: Padding(
           padding: const EdgeInsets.only(left: 20),
           child: Row(
             children: [
               Text(
                 widget.title,
-                style: TextStyle(fontSize: 20, color: Colors.white),
+                style: const TextStyle(fontSize: 20, color: Colors.white),
               ),
-              SizedBox(width: 10,),
-
-             Container(
-              
-              
-              color: Colors.white,
-              child: Text("need to be changed"),
-             ),
-             SizedBox(width: 10,),
+              const SizedBox(
+                width: 10,
+              ),
+              Container(
+                color: Colors.white,
+                child: const Text("need to be changed"),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
             ],
           ),
         ),

@@ -42,13 +42,13 @@ class _RequestBusState extends State<RequestBus> {
             ),
 
             SizedBox(
-              height: 15,
+              height: 8,
             ),
 
             // a button that allows the user to enter a specific date and store the date recieved
             Container(child: DatePickerButton()),
             SizedBox(
-              height: 15,
+              height: 8,
             ),
 
             // a unique number generated that represent request number
@@ -120,7 +120,7 @@ class _RequestBusState extends State<RequestBus> {
                     child: Container(
                       decoration: BoxDecoration(),
                       child: const Padding(
-                        padding: EdgeInsets.all(7.0),
+                        padding: EdgeInsets.all(5.0),
                         child: Column(
                           children: [
                             Text(
@@ -143,15 +143,12 @@ class _RequestBusState extends State<RequestBus> {
                     ))),
             Spacer(),
             Container(
-              
                 width: 130,
                 child: ElevatedButton(
-                 
                     onPressed: () {},
                     child: Container(
-                      
                       child: const Padding(
-                        padding: EdgeInsets.all(7.0),
+                        padding: EdgeInsets.all(5.0),
                         child: Column(
                           children: [
                             Text(
