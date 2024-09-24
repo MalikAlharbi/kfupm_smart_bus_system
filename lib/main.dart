@@ -24,8 +24,8 @@ void main() {
           children: [
             TopAppBar(),
             // Widgetmain(),
-            RequestBus(),
-            Spacer(),
+            const RequestBus(),
+            const Spacer(),
             BottomBar(),
           ],
         ),

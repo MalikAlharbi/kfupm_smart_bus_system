@@ -5,7 +5,7 @@ import 'package:uuid/uuid.dart';
 import 'dart:math';
 
 class RequestBus extends StatefulWidget {
-  RequestBus({super.key});
+  const RequestBus({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -24,7 +24,7 @@ class _RequestBusState extends State<RequestBus> {
         Column(
           children: [
             // image of KFUPM Buses
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Container(
@@ -34,20 +34,20 @@ class _RequestBusState extends State<RequestBus> {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
-                child: Image(
+                child: const Image(
                   image: AssetImage("assets/images/Bus.jpg"),
                   width: 221,
                 ),
               ),
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
 
             // a button that allows the user to enter a specific date and store the date recieved
             Container(child: DatePickerButton()),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
 
@@ -75,36 +75,31 @@ class _RequestBusState extends State<RequestBus> {
         // Second child: Column with 5 sub-children
         Column(
           children: [
-            // Container(child: Text('Second column - Child 1')),
-            // Container(child: Text('Second column - Child 2')),
-            // Container(child: Text('Second column - Child 3')),
-            // Container(child: Text('Second column - Child 4')),
-            // Container(child: Text('Second column - Child 5')),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             TextFieldBus(
               title: 'KFUPM ID:',
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             TextFieldBus(
               title: 'Purpose:',
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             TextFieldBus(
               title: 'Destination:',
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             TextFieldBus(
               title: 'Time: ',
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
           ],
@@ -112,13 +107,13 @@ class _RequestBusState extends State<RequestBus> {
         // Third child: Row with 2 sub-children
         Row(
           children: [
-            Spacer(),
+            const Spacer(),
             Container(
                 width: 130,
                 child: ElevatedButton(
                     onPressed: () {},
                     child: Container(
-                      decoration: BoxDecoration(),
+                      decoration: const BoxDecoration(),
                       child: const Padding(
                         padding: EdgeInsets.all(5.0),
                         child: Column(
@@ -141,7 +136,7 @@ class _RequestBusState extends State<RequestBus> {
                         ),
                       ),
                     ))),
-            Spacer(),
+            const Spacer(),
             Container(
                 width: 130,
                 child: ElevatedButton(
@@ -169,7 +164,7 @@ class _RequestBusState extends State<RequestBus> {
                         ),
                       ),
                     ))),
-            Spacer(),
+            const Spacer(),
           ],
         ),
       ],
