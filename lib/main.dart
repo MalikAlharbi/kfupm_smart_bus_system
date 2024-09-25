@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/widget_main.dart';
+import 'screens/WidgetMain.dart';
 import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
 import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
 
@@ -14,7 +14,9 @@ void main() {
         child: Column(
           children: [
             TopAppBar(),
-            const Widgetmain(),
+            const Expanded(
+              child: Widgetmain(),
+            ),
             BottomBar(),
           ],
         ),
