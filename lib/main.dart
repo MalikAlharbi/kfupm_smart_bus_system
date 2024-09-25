@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'screens/widget_main.dart';
 import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
 import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
+import 'package:kfupm_smart_bus_system/screens/report_problem_page_one.dart';
 // void main() {
 //   runApp(const MaterialApp(home:
 //   Widgetmain())
@@ -21,7 +22,10 @@ void main() {
         child: Column(
           children: [
             TopAppBar(),
-            Widgetmain(),
+            // Widgetmain(),
+            Spacer(),
+            ReportProblemPageOne(),
+            Spacer(),
             BottomBar(),
           ],
         ),
