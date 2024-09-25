@@ -70,47 +70,35 @@ class _RequestBusState extends State<RequestBus> {
                 ),
               ],
             )),
+            const SizedBox(height: 10,)
           ],
         ),
         // Second child: Column with 5 sub-children
         Column(
           children: [
-            const SizedBox(
-              height: 15,
-            ),
             TextFieldBus(
               title: 'KFUPM ID:',
-            ),
-            const SizedBox(
-              height: 15,
             ),
             TextFieldBus(
               title: 'Purpose:',
             ),
-            const SizedBox(
-              height: 15,
-            ),
             TextFieldBus(
               title: 'Destination:',
-            ),
-            const SizedBox(
-              height: 15,
             ),
             TextFieldBus(
               title: 'Time: ',
             ),
-            const SizedBox(
-              height: 15,
-            ),
           ],
         ),
         // Third child: Row with 2 sub-children
+        SizedBox(height: 20,),
         Row(
           children: [
             const Spacer(),
             Container(
                 width: 130,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF179C3D)),
                     onPressed: () {},
                     child: Container(
                       decoration: const BoxDecoration(),
@@ -121,14 +109,14 @@ class _RequestBusState extends State<RequestBus> {
                             Text(
                               "View",
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontSize: 17,
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
                               "Request",
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontSize: 17,
                                   fontWeight: FontWeight.bold),
                             )
@@ -140,6 +128,7 @@ class _RequestBusState extends State<RequestBus> {
             Container(
                 width: 130,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF179C3D)),
                     onPressed: () {},
                     child: Container(
                       child: const Padding(
@@ -149,14 +138,14 @@ class _RequestBusState extends State<RequestBus> {
                             Text(
                               "Submit",
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontSize: 17,
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
                               "Request",
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontSize: 17,
                                   fontWeight: FontWeight.bold),
                             )
