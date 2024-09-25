@@ -46,12 +46,14 @@ class _TextFieldBusState extends State<TextFieldBus> {
             color: Colors.white,
 
             child: TextField(
-              
-              style: const TextStyle(fontSize: 16,),
-              cursorHeight:20,
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+              cursorHeight: 20,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 8, vertical: 1),
               ),
               onChanged: (value) {
                 setState(() {

@@ -70,11 +70,13 @@ class _RequestBusState extends State<RequestBus> {
                 ),
               ],
             )),
-            const SizedBox(height: 10,)
+            const SizedBox(
+              height: 10,
+            )
           ],
         ),
         // Second child: Column with 5 sub-children
-        Column(
+        const Column(
           children: [
             TextFieldBus(
               title: 'KFUPM ID:',
@@ -91,14 +93,17 @@ class _RequestBusState extends State<RequestBus> {
           ],
         ),
         // Third child: Row with 2 sub-children
-        SizedBox(height: 20,),
+        const SizedBox(
+          height: 20,
+        ),
         Row(
           children: [
             const Spacer(),
-            Container(
+            SizedBox(
                 width: 130,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF179C3D)),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF179C3D)),
                     onPressed: () {},
                     child: Container(
                       decoration: const BoxDecoration(),
@@ -125,12 +130,12 @@ class _RequestBusState extends State<RequestBus> {
                       ),
                     ))),
             const Spacer(),
-            Container(
+            SizedBox(
                 width: 130,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF179C3D)),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF179C3D)),
                     onPressed: () {},
-                    child: Container(
                       child: const Padding(
                         padding: EdgeInsets.all(5.0),
                         child: Column(
@@ -152,7 +157,7 @@ class _RequestBusState extends State<RequestBus> {
                           ],
                         ),
                       ),
-                    ))),
+                    )),
             const Spacer(),
           ],
         ),
