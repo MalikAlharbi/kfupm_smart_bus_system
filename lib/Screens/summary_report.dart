@@ -69,7 +69,7 @@ class SummaryPage extends StatelessWidget {
         children: [
           const SizedBox(height: 10),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               const Text(
                 'Request number',
