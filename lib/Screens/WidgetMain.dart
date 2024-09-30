@@ -15,7 +15,7 @@ class Widgetmain extends StatelessWidget {
         body: SafeArea(
           child: Column(
             children: [
-              _buildMainContent(),
+              _buildMainContent(context),
             ],
           ),
         ),
@@ -34,7 +34,7 @@ class Widgetmain extends StatelessWidget {
     );
   }
 
-  Widget _buildMainContent() {
+  Widget _buildMainContent(BuildContext context) {
     //added flexable widget, and set flexable fit to tight.
     return Flexible(
       fit: FlexFit.tight,
@@ -59,15 +59,52 @@ class Widgetmain extends StatelessWidget {
               Welcoming(),
               _buildGridSection(
                 [
-                  _buildGridItem("Track Buses", Icons.directions_bus),
-                  _buildGridItem("Available Events", Icons.event),
+                  InkWell(
+                    onTap: () {
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (ctx) => // track a bus page,
+                      //   ),
+                      // );
+                    },
+                    child: _buildGridItem("Track Buses", Icons.directions_bus),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (ctx) => // available events page,
+                      //   ),
+                      // );
+                    },
+                    child: _buildGridItem("Available Events", Icons.event),
+                  )
                 ],
               ),
               const SizedBox(height: 24),
               _buildGridSection(
                 [
-                  _buildGridItem("Feedback", Icons.feedback),
-                  _buildGridItem("Report Problem", Icons.report_problem),
+                  InkWell(
+                    onTap: () {
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (ctx) => // feedback Page,
+                      //   ),
+                      // );
+                    },
+                    child: _buildGridItem("Feedback", Icons.feedback),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (ctx) => // Report a problem page,
+                      //   ),
+                      // );
+                    },
+                    child:
+                        _buildGridItem("Report Problem", Icons.report_problem),
+                  ),
                 ],
               ),
               const SizedBox(height: 24),
