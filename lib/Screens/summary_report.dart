@@ -17,6 +17,11 @@ class SummaryPage extends StatelessWidget {
         child: Column(
           children: [
             TopAppBar(),
+            const Expanded(
+              child: SingleChildScrollView(
+                
+              ),
+            ),
             BottomBar(),
           ],
         ),
