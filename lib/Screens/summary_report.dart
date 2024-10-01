@@ -26,8 +26,9 @@ class SummaryPage extends StatefulWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    _buildRequestNumberCard(),
-                    _generateData(),
+                    _generateRequestNumberCard(),
+                    const SizedBox(height: 10),
+                    _generateReportData(),
                   ],
                 ),
               ),
@@ -39,7 +40,7 @@ class SummaryPage extends StatefulWidget {
     );
   }
 
-  Widget _generateData() {
+  Widget _generateReportData() {
     return const Column(
       children: [
         Text("TEST"),
@@ -57,7 +58,7 @@ class SummaryPage extends StatefulWidget {
     );
   }
 
-  Widget _buildRequestNumberCard() {
+  Widget _generateRequestNumberCard() {
     return Container(
       margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.all(10),
