@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kfupm_smart_bus_system/Widgets/Welcoming.dart';
+
+import 'package:kfupm_smart_bus_system/screens/report_problem_page_two.dart';
 //import 'package:kfupm_smart_bus_system/Landscape.dart';
 import 'screens/widget_main.dart';
 import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
@@ -18,14 +21,19 @@ void main() {
       scaffoldBackgroundColor: Colors.grey[100],
     ),
     home: Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
+        // padding: EdgeInsets.all(8),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TopAppBar(),
-            // Widgetmain(),
-            Spacer(),
-            ReportProblemPageOne(),
-            Spacer(),
+            const Spacer(),
+            SizedBox(
+              height: 630,
+              child: ReportProblemPageTwo(),
+            ),
+            const Spacer(),
             BottomBar(),
           ],
         ),

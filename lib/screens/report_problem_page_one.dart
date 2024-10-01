@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:kfupm_smart_bus_system/Widgets/drop_down_butn.dart';
 
 class ReportProblemPageOne extends StatelessWidget {
+  List<String> list = <String>['Technical Problem', 'Non-Technical Problem'];
+
   ReportProblemPageOne({super.key});
   @override
   Widget build(BuildContext context) {
@@ -20,11 +22,8 @@ class ReportProblemPageOne extends StatelessWidget {
           height: 20,
         ),
 
+        DropDownButn(list),
 
-
-        DropDownButn(),
-        
-        
         // Text("A Drop Down Button for Choosing the Problem"),
         const SizedBox(
           height: 20,
@@ -73,37 +72,31 @@ class ReportProblemPageOne extends StatelessWidget {
         // const Text("A TextField for Writing the Problem"),
         Container(
           width: 300,
-          
           child: TextFormField(
-            
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              contentPadding: const EdgeInsets.symmetric(vertical: 75.0, horizontal: 5.0),
-            ),
-          
-          maxLines: 5,
-                           minLines: 3
-          ),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 75.0, horizontal: 5.0),
+              ),
+              maxLines: 5,
+              minLines: 3),
         ),
 
-
-
-  const SizedBox(
+        const SizedBox(
           height: 20,
         ),
 
-
-
-        ElevatedButton(onPressed: (){},
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF179C3D),
-          minimumSize: Size(120, 40)
+        ElevatedButton(
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF179C3D),
+              minimumSize: Size(120, 40)),
+          child: const Text(
+            "Submit",
+            style: TextStyle(color: Colors.white),
+          ),
         ),
-        child: const Text("Submit",
-        style: TextStyle(color: Colors.white),),)
-        ,
         // Spacer()
-        
       ],
     );
   }
