@@ -36,7 +36,9 @@ Widget _generateSummaryReport(BuildContext context) {
                   const SizedBox(height: 5),
                   _generateRequestNumberCard(),
                   const SizedBox(height: 10),
-                  _generateSummaryReportData(),
+                  _generateSummaryReportData("KFUPM ID", "201900000", Icons.person),
+                  
+                  _generateSummaryReportData("KFUPM ID", "201900000", Icons.person),
                 ],
               ),
             ),
@@ -121,30 +123,30 @@ Widget _generateRequestNumberCard() {
   
 }
 
-Widget _generateSummaryReportData() {
+Widget _generateSummaryReportData(String label, String value, IconData icon) {
   return Container(
-    margin: const EdgeInsets.symmetric(horizontal:50), 
+    margin: const EdgeInsets.symmetric(horizontal:40), 
     padding: const EdgeInsets.symmetric(vertical:8, horizontal: 20), 
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 247, 246, 246),
         border: Border.all(color: Colors.black),
         borderRadius: BorderRadius.circular(30)
       ),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Text(
-        "KFUPM ID: 20190000",
-        style: TextStyle(
+        "$label: $value",
+        style: const TextStyle(
           fontSize: 20,
           
         ),
         
           ),
-          SizedBox(width: 10),
-          Icon(Icons.credit_card, size: 30, color: Color(0xFF179C3D)),
+          const SizedBox(width: 10),
+          Icon(icon, size: 30, color: const Color(0xFF179C3D)),
         ],
       ),
     );
