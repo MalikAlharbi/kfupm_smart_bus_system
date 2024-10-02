@@ -8,104 +8,133 @@ class SummaryPage extends StatefulWidget {
   Widget build(BuildContext context) {
     return _generateSummaryReport(context);
   }
-  
+
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
+    return _SummaryPageState();
   }
 }
 
-  Widget _generateSummaryReport(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            TopAppBar(),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    _generateRequestNumberCard(),
-                    const SizedBox(height: 10),
-                    _generateReportData(),
-                  ],
-                ),
-              ),
-            ),
-            BottomBar(),
-          ],
-        ),
-      ),
-    );
+class _SummaryPageState extends State<SummaryPage> {
+  @override
+  Widget build(BuildContext context) {
+    return widget.build(context);
   }
+}
 
-  Widget _generateReportData() {
-    return const Column(
-      children: [
-        Text("TEST"),
-        Text("TEST1"),
-        Text("TEST2"),
-        Text("TEST3"),
-        Text("TEST4"),
-        Text("TEST5"),
-        Text("TEST6"),
-        Text("TEST7"),
-        Text("TEST8"),
-        Text("TEST9"),
-        Text("TEST10"),
-      ],
-    );
-  }
-
-  Widget _generateRequestNumberCard() {
-    return Container(
-      margin: const EdgeInsets.all(10),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: const Color(0xFF179C3D),
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: const [
-          BoxShadow(
-            color: Color.fromARGB(255, 0, 0, 0),
-            blurRadius: 5.0,
-          ),
-        ],
-      ),
+Widget _generateSummaryReport(BuildContext context) {
+  return Scaffold(
+    body: SafeArea(
       child: Column(
         children: [
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              const Text(
-                'Request number',
+          TopAppBar(),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  _summaryReportText(),
+                  const SizedBox(height: 5),
+                  _generateRequestNumberCard(),
+                  const SizedBox(height: 10),
+                  _generateSummaryReportData(),
+                ],
+              ),
+            ),
+          ),
+          BottomBar(),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _summaryReportText() {
+  return const Text(
+    'Summary Report',
+    style: TextStyle(
+      fontSize: 30,
+    ),
+  );
+}
+
+Widget _generateRequestNumberCard() {
+  return Container(
+    margin: const EdgeInsets.all(10),
+    padding: const EdgeInsets.all(10),
+    decoration: BoxDecoration(
+      color: const Color(0xFF179C3D),
+      borderRadius: BorderRadius.circular(10),
+      boxShadow: const [
+        BoxShadow(
+          color: Color.fromARGB(100, 0, 0, 0),
+          blurRadius: 5.0,
+          offset: Offset(0, 5), // makes the shadow appear below the box
+        ),
+      ],
+    ),
+    child: Column(
+      children: [
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            const Text(
+              'Request number',
+              style: TextStyle(
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: const Text(
+                '#21459',
                 style: TextStyle(
                   fontSize: 21,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: const Text(
-                  '#21459',
-                  style: TextStyle(
-                    fontSize: 21,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-        ],
-      ),
-    );
-  }
-  
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.start,
+        //   children: const [
+        //     Text(
+        //       "test",
+        //       style: TextStyle(
+        //   fontSize: 18,
+        //   color: Colors.white,
+        //       ),
+        //     ),
+        //   ],
+        // )   (this part will be used to make Request history page, was just testing it here!)
+      ],
+    ),
+  );
 
+  
+}
+
+Widget _generateSummaryReportData() {
+  return const Column(
+    children: [
+      Text("TEST"),
+      Text("TEST1"),
+      Text("TEST2"),
+      Text("TEST3"),
+      Text("TEST4"),
+      Text("TEST5"),
+      Text("TEST6"),
+      Text("TEST7"),
+      Text("TEST8"),
+      Text("TEST9"),
+      Text("TEST10"),
+    ],
+  );
+}
