@@ -88,7 +88,7 @@ Widget _generateRequestNumberCard() {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: const Color.fromARGB(255, 247, 246, 246),
                 borderRadius: BorderRadius.circular(30),
               ),
               child: const Text(
@@ -126,11 +126,12 @@ Widget _generateSummaryReportData() {
     margin: const EdgeInsets.symmetric(horizontal:50), 
     padding: const EdgeInsets.symmetric(vertical:8, horizontal: 20), 
       decoration: BoxDecoration(
-        color: const Color(0xFFF7F6F6),
+        color: const Color.fromARGB(255, 247, 246, 246),
         border: Border.all(color: Colors.black),
         borderRadius: BorderRadius.circular(30)
       ),
       child: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           
           SizedBox(width: 10),
@@ -138,8 +139,9 @@ Widget _generateSummaryReportData() {
         "KFUPM ID: 20190000",
         style: TextStyle(
           fontSize: 20,
-          fontWeight: FontWeight.bold,
+          
         ),
+        
           ),
           SizedBox(width: 10),
           Icon(Icons.credit_card, size: 30, color: Color(0xFF179C3D)),
