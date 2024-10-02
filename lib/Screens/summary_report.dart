@@ -122,19 +122,29 @@ Widget _generateRequestNumberCard() {
 }
 
 Widget _generateSummaryReportData() {
-  return const Column(
-    children: [
-      Text("TEST"),
-      Text("TEST1"),
-      Text("TEST2"),
-      Text("TEST3"),
-      Text("TEST4"),
-      Text("TEST5"),
-      Text("TEST6"),
-      Text("TEST7"),
-      Text("TEST8"),
-      Text("TEST9"),
-      Text("TEST10"),
-    ],
-  );
+  return Container(
+    margin: const EdgeInsets.symmetric(horizontal:50), 
+    padding: const EdgeInsets.symmetric(vertical:8, horizontal: 20), 
+      decoration: BoxDecoration(
+        color: const Color(0xFFF7F6F6),
+        border: Border.all(color: Colors.black),
+        borderRadius: BorderRadius.circular(30)
+      ),
+      child: const Row(
+        children: [
+          
+          SizedBox(width: 10),
+          Text(
+        "KFUPM ID: 20190000",
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+          ),
+          SizedBox(width: 10),
+          Icon(Icons.credit_card, size: 30, color: Color(0xFF179C3D)),
+        ],
+      ),
+    );
+  
 }
