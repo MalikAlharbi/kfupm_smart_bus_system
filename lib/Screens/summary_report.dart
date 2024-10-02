@@ -62,7 +62,7 @@ Widget _summaryReportText() {
 Widget _generateRows() {
   return Column(
     children: [
-      _generateSummaryReportData("KFUPM ID", "201900000", Icons.credit_card),
+      _generateSummaryReportData("KFUPM ID", "201900000", Icons.person),
       _generateSummaryReportData("Assembely point", "KFUPM Mall", Icons.location_on),
       _generateSummaryReportData("Destination", "Building 54", Icons.location_on),
       _generateSummaryReportData("Date", "15/10/2024", Icons.calendar_today),
