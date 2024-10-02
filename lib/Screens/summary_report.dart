@@ -135,7 +135,7 @@ Widget _generateRequestNumberCard() {
 
 Widget _generateSummaryReportData(String label, String value, IconData icon) {
   return Container(
-    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+    margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
     padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
     decoration: BoxDecoration(
         color: const Color.fromARGB(255, 247, 246, 246),
