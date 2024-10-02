@@ -63,7 +63,7 @@ Widget _generateRequestNumberCard() {
     padding: const EdgeInsets.all(10),
     decoration: BoxDecoration(
       color: const Color(0xFF179C3D),
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(20),
       boxShadow: const [
         BoxShadow(
           color: Color.fromARGB(100, 0, 0, 0),
