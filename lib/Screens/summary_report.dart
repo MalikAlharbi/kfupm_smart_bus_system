@@ -37,6 +37,8 @@ Widget _generateSummaryReport(BuildContext context) {
                   _generateRequestNumberCard(),
                   const SizedBox(height: 10),
                   _generateRows(),
+                  const SizedBox(height: 10),
+                  _generateNavigationButtons(),
                 ],
               ),
             ),
@@ -61,8 +63,8 @@ Widget _generateRows() {
   return Column(
     children: [
       _generateSummaryReportData("KFUPM ID", "201900000", Icons.credit_card),
-      _generateSummaryReportData("Assembely point", "KFUPM MALL", Icons.location_on),
-      _generateSummaryReportData("Destination", "Building 54", Icons.location_searching),
+      _generateSummaryReportData("Assembely point", "KFUPM Mall", Icons.location_on),
+      _generateSummaryReportData("Destination", "Building 54", Icons.location_on),
       _generateSummaryReportData("Date", "15/10/2024", Icons.calendar_today),
       _generateSummaryReportData("Assembly time", "12:00 pm", Icons.access_time),
       _generateSummaryReportData("Bus number", "37", Icons.directions_bus),
@@ -164,3 +166,30 @@ Widget _generateSummaryReportData(String label, String value, IconData icon) {
     ),
   );
 }
+
+Widget _generateNavigationButtons(){
+   return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            // navigate to previous report
+          },
+        ),
+        IconButton(
+          icon: const Icon(Icons.share),
+          onPressed: () {
+            // Handle share/export action
+          },
+        ),
+        IconButton(
+          icon: const Icon(Icons.arrow_forward_ios),
+          onPressed: () {
+            // navigate to next report
+          },
+        ),
+      ],
+    );
+  }
+
