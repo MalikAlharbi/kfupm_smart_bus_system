@@ -36,9 +36,9 @@ Widget _generateSummaryReport(BuildContext context) {
                   const SizedBox(height: 5),
                   _generateRequestNumberCard(),
                   const SizedBox(height: 10),
-                  _generateSummaryReportData("KFUPM ID", "201900000", Icons.person),
-                  
-                  _generateSummaryReportData("KFUPM ID", "201900000", Icons.person),
+
+                  _generateRows(),
+
                 ],
               ),
             ),
@@ -57,6 +57,18 @@ Widget _summaryReportText() {
       fontSize: 30,
     ),
   );
+}
+
+Widget _generateRows(){
+return Column(
+  children: [
+    _generateSummaryReportData("KFUPM ID", "201900000", Icons.person),
+    _generateSummaryReportData("Assembely point:", "KFUPM MALL", Icons.location_on),
+    _generateSummaryReportData("Destination: ", " ", Icons.person),
+
+  ],
+);
+
 }
 
 Widget _generateRequestNumberCard() {
@@ -125,7 +137,7 @@ Widget _generateRequestNumberCard() {
 
 Widget _generateSummaryReportData(String label, String value, IconData icon) {
   return Container(
-    margin: const EdgeInsets.symmetric(horizontal:40), 
+    margin: const EdgeInsets.symmetric(horizontal:40,), 
     padding: const EdgeInsets.symmetric(vertical:8, horizontal: 20), 
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 247, 246, 246),
@@ -152,3 +164,5 @@ Widget _generateSummaryReportData(String label, String value, IconData icon) {
     );
   
 }
+
+
