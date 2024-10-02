@@ -36,9 +36,7 @@ Widget _generateSummaryReport(BuildContext context) {
                   const SizedBox(height: 5),
                   _generateRequestNumberCard(),
                   const SizedBox(height: 10),
-
                   _generateRows(),
-
                 ],
               ),
             ),
@@ -59,16 +57,18 @@ Widget _summaryReportText() {
   );
 }
 
-Widget _generateRows(){
-return Column(
-  children: [
-    _generateSummaryReportData("KFUPM ID", "201900000", Icons.person),
-    _generateSummaryReportData("Assembely point:", "KFUPM MALL", Icons.location_on),
-    _generateSummaryReportData("Destination: ", " ", Icons.person),
+Widget _generateRows() {
+  return Column(
+    children: [
+      _generateSummaryReportData("KFUPM ID", "201900000", Icons.credit_card),
+      _generateSummaryReportData("Assembely point", "KFUPM MALL", Icons.location_on),
+      _generateSummaryReportData("Destination", "Building 54", Icons.location_searching),
+      _generateSummaryReportData("Date", "15/10/2024", Icons.calendar_today),
+      _generateSummaryReportData("Assembly time", "12:00 pm", Icons.access_time),
+      _generateSummaryReportData("Bus number", "37", Icons.directions_bus),
 
-  ],
-);
-
+    ],
+  );
 }
 
 Widget _generateRequestNumberCard() {
@@ -131,38 +131,36 @@ Widget _generateRequestNumberCard() {
       ],
     ),
   );
-
-  
 }
 
 Widget _generateSummaryReportData(String label, String value, IconData icon) {
   return Container(
-    margin: const EdgeInsets.symmetric(horizontal:40,), 
-    padding: const EdgeInsets.symmetric(vertical:8, horizontal: 20), 
-      decoration: BoxDecoration(
+    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+    decoration: BoxDecoration(
         color: const Color.fromARGB(255, 247, 246, 246),
         border: Border.all(color: Colors.black),
-        borderRadius: BorderRadius.circular(30)
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          
-          const SizedBox(width: 10),
-          Text(
-        "$label: $value",
-        style: const TextStyle(
-          fontSize: 20,
-          
-        ),
-        
+        borderRadius: BorderRadius.circular(30)),
+    child: Row(
+      children: [
+        Expanded(
+          child: Text(
+            '$label:',
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          const SizedBox(width: 10),
-          Icon(icon, size: 30, color: const Color(0xFF179C3D)),
-        ],
-      ),
-    );
-  
+        ),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 20,
+          ),
+        ),
+        const SizedBox(width: 5),
+        Icon(icon, color: const Color(0xFF179C3D), size: 24),
+      ],
+    ),
+  );
 }
-
-
