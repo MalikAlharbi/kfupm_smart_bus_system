@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kfupm_smart_bus_system/Screens/request_bus.dart';
-import 'package:kfupm_smart_bus_system/screens/WidgetMain.dart';
+import 'package:kfupm_smart_bus_system/screens/widget_main.dart';
 
 
 
