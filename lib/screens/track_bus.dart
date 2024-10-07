@@ -11,6 +11,11 @@ class TrackBus extends StatefulWidget {
 class _TrackBusState extends State<TrackBus> {
   late GoogleMapController mapController;
 
+  final LatLngBounds kfupmBounds = LatLngBounds(
+    southwest: const LatLng(26.300125, 50.142974),
+    northeast: const LatLng(26.318681, 50.158939),
+  );
+
   final LatLng kfupmCenter =
       const LatLng(26.307048543732158, 50.145802165049304);
 
@@ -27,6 +32,8 @@ class _TrackBusState extends State<TrackBus> {
           target: kfupmCenter,
           zoom: 15.0,
         ),
+        minMaxZoomPreference: const MinMaxZoomPreference(0, 15),
+        cameraTargetBounds: CameraTargetBounds(kfupmBounds),
       ),
     );
   }
