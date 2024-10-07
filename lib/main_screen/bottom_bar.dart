@@ -26,7 +26,6 @@ Widget _buildIconButton(IconData icon, VoidCallback onTap) {
   @override
   Widget build(context) {
     return Container(
-      margin: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: const Color(0xFF179C3D),
