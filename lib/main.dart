@@ -16,13 +16,11 @@ void main() {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TopAppBar(),
-            const Spacer(),
             const SizedBox(
-              height: 630,
+              height: 560,
               child:
                   TrackBus(), // This will now use the Scaffold from TrackBus.
             ),
-            const Spacer(),
             BottomBar(),
           ],
         ),
