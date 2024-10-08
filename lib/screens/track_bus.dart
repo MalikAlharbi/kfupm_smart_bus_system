@@ -34,6 +34,10 @@ class _TrackBusState extends State<TrackBus> {
         ),
         minMaxZoomPreference: const MinMaxZoomPreference(15.0, 18.0),
         cameraTargetBounds: CameraTargetBounds(kfupmBounds),
+        //Restrict to 2D movment only
+        compassEnabled: false,
+        tiltGesturesEnabled: false,
+        rotateGesturesEnabled: false,
       ),
     );
   }
