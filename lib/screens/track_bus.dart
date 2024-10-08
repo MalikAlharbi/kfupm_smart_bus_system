@@ -12,8 +12,8 @@ class _TrackBusState extends State<TrackBus> {
   late GoogleMapController mapController;
 
   final LatLngBounds kfupmBounds = LatLngBounds(
-    southwest: const LatLng(26.300125, 50.142974),
-    northeast: const LatLng(26.318681, 50.158939),
+    southwest: const LatLng(26.302883027647383, 50.134502224126315),
+    northeast: const LatLng(26.314681, 50.156939),
   );
 
   final LatLng kfupmCenter =
@@ -32,7 +32,7 @@ class _TrackBusState extends State<TrackBus> {
           target: kfupmCenter,
           zoom: 15.0,
         ),
-        minMaxZoomPreference: const MinMaxZoomPreference(0, 15),
+        minMaxZoomPreference: const MinMaxZoomPreference(15.0, 18.0),
         cameraTargetBounds: CameraTargetBounds(kfupmBounds),
       ),
     );
