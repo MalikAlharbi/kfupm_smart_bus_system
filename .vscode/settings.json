@@ -3,5 +3,8 @@
   "files.autoSaveDelay": 500,
   "dart.flutterHotReloadOnSave": "allIfDirty",
   "dart.hotReloadOnSave": "allIfDirty",
-  "conventionalCommits.scopes": ["Google Maps"]
+  "conventionalCommits.scopes": [
+    "Google Maps"
+  ],
+  "cmake.ignoreCMakeListsMissing": true
 }
