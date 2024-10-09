@@ -23,9 +23,14 @@ class _SummaryPageState extends State<SummaryPage> {
 }
 
 Widget _generateSummaryReport(BuildContext context) {
-  return Scaffold(
-    body: SafeArea(
-      child: Column(
+  return SafeArea(
+    minimum: const EdgeInsets.all(5),
+    child: Scaffold(
+      appBar: AppBar(
+        flexibleSpace: TopAppBar(),
+      ),
+      bottomNavigationBar: const BottomBar(),
+      body: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
@@ -47,7 +52,6 @@ Widget _generateSummaryReport(BuildContext context) {
   );
 }
 
-
 Widget _generateRows() {
   return Card(
     color: const Color.fromARGB(255, 255, 255, 255),
@@ -59,10 +63,14 @@ Widget _generateRows() {
       child: Column(
         children: [
           _generateSummaryReportData("KFUPM ID", "201900000", Icons.person),
-          _generateSummaryReportData("Assembely point", "KFUPM Mall", Icons.location_on),
-          _generateSummaryReportData("Destination", "Building 54", Icons.location_on),
-          _generateSummaryReportData("Date", "15/10/2024", Icons.calendar_today),
-          _generateSummaryReportData("Assembly time", "12:00 pm", Icons.access_time),
+          _generateSummaryReportData(
+              "Assembely point", "KFUPM Mall", Icons.location_on),
+          _generateSummaryReportData(
+              "Destination", "Building 54", Icons.location_on),
+          _generateSummaryReportData(
+              "Date", "15/10/2024", Icons.calendar_today),
+          _generateSummaryReportData(
+              "Assembly time", "12:00 pm", Icons.access_time),
           _generateSummaryReportData("Bus number", "37", Icons.directions_bus),
         ],
       ),

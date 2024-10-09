@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kfupm_smart_bus_system/Screens/summary_report.dart';
 import 'package:kfupm_smart_bus_system/Widgets/old_request_card.dart';
 import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
 import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
@@ -8,33 +9,37 @@ class RequestHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // Use the AppBar from the Scaffold for the title
-      appBar: AppBar(
-        title: const Text('Request History'),
-      ),
-      body: Column(
-        children: [
-          // Fixed at the top
-          TopAppBar(),
-          Expanded(
-            child: ListView(
-              children: const [
-                OldRequestCard(requestNumber: 21459, status: 'Pending'),
-                OldRequestCard(requestNumber: 21460, status: 'Approved'),
-                OldRequestCard(requestNumber: 21460, status: 'Approved'),
-                OldRequestCard(requestNumber: 21460, status: 'Approved'),
-                OldRequestCard(requestNumber: 21460, status: 'Approved'),
-                OldRequestCard(requestNumber: 21460, status: 'Approved'),
-                OldRequestCard(requestNumber: 21461, status: 'Rejected'),
-                OldRequestCard(requestNumber: 21462, status: 'Rejected'),
-              ],
-            ),
+    return SafeArea(
+      minimum: const EdgeInsets.all(5),
+      child: Scaffold(
+        appBar: AppBar(
+          flexibleSpace: TopAppBar(),
+        ),
+        bottomNavigationBar: const BottomBar(),
+        body: Expanded(
+          child: ListView(
+            children: [
+              InkWell(
+                child: OldRequestCard(requestNumber: 21459, status: 'Pending'),
+                onTap: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (ctx) => const SummaryPage(),
+                    ),
+                  );
+                },
+              ),
+              OldRequestCard(requestNumber: 21460, status: 'Approved'),
+              OldRequestCard(requestNumber: 21460, status: 'Approved'),
+              OldRequestCard(requestNumber: 21460, status: 'Approved'),
+              OldRequestCard(requestNumber: 21460, status: 'Approved'),
+              OldRequestCard(requestNumber: 21460, status: 'Approved'),
+              OldRequestCard(requestNumber: 21461, status: 'Rejected'),
+              OldRequestCard(requestNumber: 21462, status: 'Rejected'),
+            ],
           ),
-        ],
+        ),
       ),
-      // Fixed at the bottom
-      bottomNavigationBar: BottomBar(),
     );
   }
 }
