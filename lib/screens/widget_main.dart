@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kfupm_smart_bus_system/Screens/report_problem_screen.dart';
 import 'package:kfupm_smart_bus_system/Widgets/Welcoming.dart';
 import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
 import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
@@ -106,11 +107,11 @@ class Widgetmain extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (ctx) => // Report a problem page,
-                      //   ),
-                      // );
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (ctx) => ReportProblemScreen(),
+                        ),
+                      );
                     },
                     child:
                         _buildGridItem("Report Problem", Icons.report_problem),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kfupm_smart_bus_system/Screens/request_history.dart';
 import 'package:kfupm_smart_bus_system/Widgets/text_field.dart';
 import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
 import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
@@ -112,8 +113,14 @@ class _RequestBusState extends State<RequestBus> {
                     width: 130,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF179C3D)),
-                        onPressed: () {},
+                            backgroundColor: const Color(0xFF179C3D)),
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (ctx) => const RequestHistoryScreen(),
+                            ),
+                          );
+                        },
                         child: Container(
                           decoration: const BoxDecoration(),
                           child: const Padding(
