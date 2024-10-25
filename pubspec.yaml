@@ -63,6 +63,7 @@ flutter:
   assets:
     - assets/images/banner1.jpg
     - assets/images/kfupm_logo.png
+    - assets/images/bus_icon.png
     - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
