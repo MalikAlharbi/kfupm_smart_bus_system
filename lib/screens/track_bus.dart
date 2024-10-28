@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kfupm_smart_bus_system/api/api_service.dart';
+import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
+import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
 import 'dart:async';
 
 class TrackBus extends StatefulWidget {
@@ -61,21 +63,27 @@ class _TrackBusState extends State<TrackBus> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GoogleMap(
-        onMapCreated: _onMapCreated,
-        initialCameraPosition: CameraPosition(
-          target: kfupmCenter,
-          zoom: 15.0,
-        ),
-        minMaxZoomPreference: const MinMaxZoomPreference(15.0, 21.0),
-        cameraTargetBounds: CameraTargetBounds(kfupmBounds),
-        //Restrict to 2D movment only
-        compassEnabled: false,
-        tiltGesturesEnabled: false,
-        rotateGesturesEnabled: false,
-        markers: Set.from(_markers),
-      ),
-    );
+    return SafeArea(
+        minimum: const EdgeInsets.all(5),
+        child: Scaffold(
+          appBar: AppBar(
+            flexibleSpace: TopAppBar(),
+          ),
+          bottomNavigationBar: BottomBar(),
+          body: GoogleMap(
+            onMapCreated: _onMapCreated,
+            initialCameraPosition: CameraPosition(
+              target: kfupmCenter,
+              zoom: 15.0,
+            ),
+            minMaxZoomPreference: const MinMaxZoomPreference(15.0, 21.0),
+            cameraTargetBounds: CameraTargetBounds(kfupmBounds),
+            //Restrict to 2D movment only
+            compassEnabled: false,
+            tiltGesturesEnabled: false,
+            rotateGesturesEnabled: false,
+            markers: Set.from(_markers),
+          ),
+        ));
   }
 }
