@@ -4,6 +4,7 @@ import 'package:kfupm_smart_bus_system/Widgets/Welcoming.dart';
 import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
 import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
 import 'package:kfupm_smart_bus_system/screens/contact_us.dart';
+import 'package:kfupm_smart_bus_system/screens/track_bus.dart';
 
 class Widgetmain extends StatelessWidget {
   const Widgetmain({super.key});
@@ -72,11 +73,11 @@ class Widgetmain extends StatelessWidget {
                 [
                   InkWell(
                     onTap: () {
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (ctx) => // track a bus page,
-                      //   ),
-                      // );
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (ctx) => TrackBus(),
+                        ),
+                      );
                     },
                     child: _buildGridItem("Track Buses", Icons.directions_bus),
                   ),
