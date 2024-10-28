@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:kfupm_smart_bus_system/Screens/report_problem_screen.dart';
 import 'package:kfupm_smart_bus_system/Widgets/Welcoming.dart';
+import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
+import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
+import 'package:kfupm_smart_bus_system/screens/contact_us.dart';
 
 class Widgetmain extends StatelessWidget {
   const Widgetmain({super.key});
@@ -11,12 +15,19 @@ class Widgetmain extends StatelessWidget {
         primaryColor: const Color(0xFF179C3D),
         scaffoldBackgroundColor: Colors.grey[100],
       ),
-      home: Scaffold(
-        body: SafeArea(
-          child: Column(
-            children: [
-              _buildMainContent(context),
-            ],
+      home: SafeArea(
+        minimum: const EdgeInsets.all(5),
+        child: Scaffold(
+          appBar: AppBar(
+            flexibleSpace: TopAppBar(),
+          ),
+          bottomNavigationBar: BottomBar(),
+          body: SafeArea(
+            child: Column(
+              children: [
+                _buildMainContent(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -39,7 +50,7 @@ class Widgetmain extends StatelessWidget {
     return Flexible(
       fit: FlexFit.tight,
       child: Container(
-        margin: const EdgeInsets.all(16.0),
+        margin: const EdgeInsets.all(11.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: const Color(0xFF179C3D),
@@ -56,7 +67,7 @@ class Widgetmain extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Welcoming(),
+              const Welcoming(),
               _buildGridSection(
                 [
                   InkWell(
@@ -96,11 +107,11 @@ class Widgetmain extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (ctx) => // Report a problem page,
-                      //   ),
-                      // );
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (ctx) => ReportProblemScreen(),
+                        ),
+                      );
                     },
                     child:
                         _buildGridItem("Report Problem", Icons.report_problem),

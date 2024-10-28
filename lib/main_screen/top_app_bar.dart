@@ -17,46 +17,46 @@ class TopAppBar extends StatelessWidget {
 
   @override
   Widget build(context) {
-    return Container(
-      margin: const EdgeInsets.all(5.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: const Color(0xFF179C3D),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Row(
-          children: [
-            _buildIconButton(Icons.account_circle_outlined, () {
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (ctx) => //screen instence,
-              //   ),
-              // );
-            }),
-            const Spacer(),
-            const Image(
-              image: AssetImage("assets/images/kfupm_logo.png"),
-              width: 57,
-            ),
-            const Spacer(),
-            _buildIconButton(Icons.call, () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (ctx) => const ContactUs(),
-                ),
-              );
-            }),
-          ],
+    return AppBar(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
         ),
+        
       ),
+      
+      backgroundColor: const Color(0xFF179C3D),
+      leading: Padding(
+        padding: const EdgeInsets.only(
+          left: 10,
+        ),
+        child: _buildIconButton(Icons.account_circle_outlined, () {
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (ctx) => //screen instence,
+          //   ),
+          // );
+        }),
+      ),
+      centerTitle: true,
+      title: const Image(
+        image: AssetImage("assets/images/kfupm_logo.png"),
+        width: 50,
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(
+            right: 10,
+          ),
+          child: _buildIconButton(Icons.call, () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (ctx) => const ContactUs(),
+              ),
+            );
+          }),
+        ),
+      ],
     );
   }
 }

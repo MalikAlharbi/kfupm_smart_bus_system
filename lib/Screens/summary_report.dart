@@ -23,16 +23,19 @@ class _SummaryPageState extends State<SummaryPage> {
 }
 
 Widget _generateSummaryReport(BuildContext context) {
-  return Scaffold(
-    body: SafeArea(
-      child: Column(
+  return SafeArea(
+    minimum: const EdgeInsets.all(5),
+    child: Scaffold(
+      appBar: AppBar(
+        flexibleSpace: TopAppBar(),
+      ),
+      bottomNavigationBar: const BottomBar(),
+      body: Column(
         children: [
-          TopAppBar(),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  _summaryReportText(),
                   const SizedBox(height: 5),
                   _generateRequestNumberCard(),
                   const SizedBox(height: 10),
@@ -43,33 +46,35 @@ Widget _generateSummaryReport(BuildContext context) {
               ),
             ),
           ),
-          BottomBar(),
         ],
       ),
     ),
   );
 }
 
-Widget _summaryReportText() {
-  return const Text(
-    'Summary Report',
-    style: TextStyle(
-      fontSize: 30,
-    ),
-  );
-}
-
 Widget _generateRows() {
-  return Column(
-    children: [
-      _generateSummaryReportData("KFUPM ID", "201900000", Icons.person),
-      _generateSummaryReportData("Assembely point", "KFUPM Mall", Icons.location_on),
-      _generateSummaryReportData("Destination", "Building 54", Icons.location_on),
-      _generateSummaryReportData("Date", "15/10/2024", Icons.calendar_today),
-      _generateSummaryReportData("Assembly time", "12:00 pm", Icons.access_time),
-      _generateSummaryReportData("Bus number", "37", Icons.directions_bus),
-
-    ],
+  return Card(
+    color: const Color.fromARGB(255, 255, 255, 255),
+    elevation: 4,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          _generateSummaryReportData("KFUPM ID", "201900000", Icons.person),
+          _generateSummaryReportData(
+              "Assembely point", "KFUPM Mall", Icons.location_on),
+          _generateSummaryReportData(
+              "Destination", "Building 54", Icons.location_on),
+          _generateSummaryReportData(
+              "Date", "15/10/2024", Icons.calendar_today),
+          _generateSummaryReportData(
+              "Assembly time", "12:00 pm", Icons.access_time),
+          _generateSummaryReportData("Bus number", "37", Icons.directions_bus),
+        ],
+      ),
+    ),
   );
 }
 
@@ -118,18 +123,6 @@ Widget _generateRequestNumberCard() {
           ],
         ),
         const SizedBox(height: 10),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.start,
-        //   children: const [
-        //     Text(
-        //       "test",
-        //       style: TextStyle(
-        //   fontSize: 18,
-        //   color: Colors.white,
-        //       ),
-        //     ),
-        //   ],
-        // )   (this part will be used to make Request history page, was just testing it here!)
       ],
     ),
   );
@@ -137,59 +130,54 @@ Widget _generateRequestNumberCard() {
 
 Widget _generateSummaryReportData(String label, String value, IconData icon) {
   return Container(
-    margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-    decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 247, 246, 246),
-        border: Border.all(color: Colors.black),
-        borderRadius: BorderRadius.circular(30)),
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
     child: Row(
       children: [
+        Icon(icon, color: Color(0xFF179C3D), size: 24),
+        SizedBox(width: 16),
         Expanded(
-          child: Text(
-            '$label:',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              ),
+              SizedBox(height: 4),
+              Text(
+                value,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
         ),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 20,
-          ),
-        ),
-        const SizedBox(width: 5),
-        Icon(icon, color: const Color(0xFF179C3D), size: 24),
       ],
     ),
   );
 }
 
-Widget _generateNavigationButtons(){
-   return Row(
+Widget _generateNavigationButtons() {
+  return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            // navigate to previous report
-          },
-        ),
-        IconButton(
-          icon: const Icon(Icons.share),
-          onPressed: () {
-            // Handle share/export action
-          },
-        ),
-        IconButton(
-          icon: const Icon(Icons.arrow_forward_ios),
-          onPressed: () {
-            // navigate to next report
-          },
-        ),
-      ],
-    );
-  }
-
+    children: [
+      IconButton(
+        icon: const Icon(Icons.arrow_back_ios),
+        onPressed: () {
+          // navigate to previous report
+        },
+      ),
+      IconButton(
+        icon: const Icon(Icons.share),
+        onPressed: () {
+          // Handle share/export action
+        },
+      ),
+      IconButton(
+        icon: const Icon(Icons.arrow_forward_ios),
+        onPressed: () {
+          // navigate to next report
+        },
+      ),
+    ],
+  );
+}

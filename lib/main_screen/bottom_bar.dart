@@ -2,31 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:kfupm_smart_bus_system/Screens/request_bus.dart';
 import 'package:kfupm_smart_bus_system/screens/widget_main.dart';
 
-
-
-
-
 class BottomBar extends StatelessWidget {
+  const BottomBar({super.key});
 
-  BottomBar({super.key});
-
-
-Widget _buildIconButton(IconData icon, VoidCallback onTap) {
-  return InkWell(
-    onTap: onTap,
-    child: Icon(
-      icon,
-      size: 32,
-      color: Colors.white,
-    ),
-  );
-}
-
+  Widget _buildIconButton(IconData icon, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Icon(
+        icon,
+        size: 32,
+        color: Colors.white,
+      ),
+    );
+  }
 
   @override
   Widget build(context) {
     return Container(
-      margin: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: const Color(0xFF179C3D),
@@ -43,7 +35,7 @@ Widget _buildIconButton(IconData icon, VoidCallback onTap) {
         child: Row(
           children: [
             _buildIconButton(Icons.directions_bus, () {
-              Navigator.of(context).push(
+              Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (ctx) => const RequestBus(),
                 ),
@@ -51,7 +43,7 @@ Widget _buildIconButton(IconData icon, VoidCallback onTap) {
             }),
             const Spacer(),
             _buildIconButton(Icons.home, () {
-              Navigator.of(context).push(
+              Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (ctx) => const Widgetmain(),
                 ),
