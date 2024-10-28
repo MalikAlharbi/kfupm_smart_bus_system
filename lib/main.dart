@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screens/track_bus.dart';
+import 'package:kfupm_smart_bus_system/screens/request_bus.dart';
+import 'screens/widget_main.dart';
 import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
 import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
 
@@ -16,10 +17,8 @@ void main() {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TopAppBar(),
-            const SizedBox(
-              height: 560,
-              child:
-                  TrackBus(), // This will now use the Scaffold from TrackBus.
+            const Expanded(
+              child: Widgetmain(),
             ),
             BottomBar(),
           ],

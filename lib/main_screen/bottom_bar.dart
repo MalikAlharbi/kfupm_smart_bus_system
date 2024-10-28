@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kfupm_smart_bus_system/Screens/request_bus.dart';
+import 'package:kfupm_smart_bus_system/screens/widget_main.dart';
 
 
 
@@ -41,15 +43,23 @@ Widget _buildIconButton(IconData icon, VoidCallback onTap) {
         child: Row(
           children: [
             _buildIconButton(Icons.directions_bus, () {
-              print("Profile tapped");
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => const RequestBus(),
+                ),
+              );
             }),
             const Spacer(),
             _buildIconButton(Icons.home, () {
-              print("home");
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => const Widgetmain(),
+                ),
+              );
             }),
             const Spacer(),
             _buildIconButton(Icons.logout, () {
-              print("Call tapped");
+              Navigator.of(context).pop();
             }),
           ],
         ),

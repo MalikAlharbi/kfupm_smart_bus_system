@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-
-
+import 'package:kfupm_smart_bus_system/screens/contact_us.dart';
 
 class TopAppBar extends StatelessWidget {
- 
   TopAppBar({super.key});
 
-
   Widget _buildIconButton(IconData icon, VoidCallback onTap) {
-  return InkWell(
-    onTap: onTap,
-    child: Icon(
-      icon,
-      size: 32,
-      color: Colors.white,
-    ),
-  );
-}
+    return InkWell(
+      onTap: onTap,
+      child: Icon(
+        icon,
+        size: 32,
+        color: Colors.white,
+      ),
+    );
+  }
 
   @override
   Widget build(context) {
@@ -38,7 +35,11 @@ class TopAppBar extends StatelessWidget {
         child: Row(
           children: [
             _buildIconButton(Icons.account_circle_outlined, () {
-              print("Profile tapped");
+              // Navigator.of(context).push(
+              //   MaterialPageRoute(
+              //     builder: (ctx) => //screen instence,
+              //   ),
+              // );
             }),
             const Spacer(),
             const Image(
@@ -47,14 +48,15 @@ class TopAppBar extends StatelessWidget {
             ),
             const Spacer(),
             _buildIconButton(Icons.call, () {
-              print("Call tapped");
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => const ContactUs(),
+                ),
+              );
             }),
           ],
         ),
       ),
     );
   }
-
-
-
 }
