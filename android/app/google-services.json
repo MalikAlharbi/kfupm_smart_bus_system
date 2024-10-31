@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "949319058910",
+    "project_id": "kfupm-smart-bus",
+    "storage_bucket": "kfupm-smart-bus.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:949319058910:android:d8bbcd3e55e6f8f8c7894f",
+        "android_client_info": {
+          "package_name": "kfupm.smart.bus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpXCDLaFR3w-tnTR_gMlsUuF5bdPUsnKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

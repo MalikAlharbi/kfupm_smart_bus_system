@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:kfupm_smart_bus_system/Screens/report_problem_screen.dart';
-import 'package:kfupm_smart_bus_system/screens/request_bus.dart';
 import 'screens/widget_main.dart';
-import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
-import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  
   runApp(
     MaterialApp(
       theme: ThemeData(
@@ -15,7 +17,6 @@ void main() {
       ),
       home: const Scaffold(
         body: Widgetmain(),
-        
       ),
     ),
   );
