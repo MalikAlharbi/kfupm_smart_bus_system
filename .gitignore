@@ -15,9 +15,6 @@ migrate_working_dir/
 **/generated_*
 **/Generated*
 
-#Secerts
-*.xcconfig
-*.pbxproj
 
 # env variables
 .env
