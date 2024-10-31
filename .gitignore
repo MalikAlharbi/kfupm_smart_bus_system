@@ -8,7 +8,20 @@
 .buildlog/
 .history
 .svn/
+
 migrate_working_dir/
+
+#generated files
+**/generated_*
+**/Generated*
+
+#Secerts
+*.xcconfig
+*.pbxproj
+
+# env variables
+.env
+ios/Runner/Info.plist
 
 # IntelliJ related
 *.iml
