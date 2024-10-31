@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "949319058910",
+    "firebase_url": "https://kfupm-smart-bus-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "kfupm-smart-bus",
     "storage_bucket": "kfupm-smart-bus.appspot.com"
   },
