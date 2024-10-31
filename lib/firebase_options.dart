@@ -15,7 +15,6 @@ import 'package:flutter/foundation.dart'
 // / );
 // / ```
 
-
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
@@ -30,10 +29,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -56,7 +52,8 @@ class DefaultFirebaseOptions {
     appId: '1:949319058910:android:d8bbcd3e55e6f8f8c7894f',
     messagingSenderId: '949319058910',
     projectId: 'kfupm-smart-bus',
-    storageBucket: 'kfupm-smart-bus.appspot.com',
+    databaseURL: 'https://kfupm-smart-bus-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'kfupm-smart-bus.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -64,7 +61,19 @@ class DefaultFirebaseOptions {
     appId: '1:949319058910:ios:1763d3e8197fb472c7894f',
     messagingSenderId: '949319058910',
     projectId: 'kfupm-smart-bus',
-    storageBucket: 'kfupm-smart-bus.appspot.com',
+    databaseURL: 'https://kfupm-smart-bus-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'kfupm-smart-bus.firebasestorage.app',
     iosBundleId: 'com.example.kfupmSmartBusSystem',
   );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyCdC0J0ozGhcStAC5dUYq_k6tA-RKniyUc',
+    appId: '1:949319058910:ios:ccdb7227df4241b8c7894f',
+    messagingSenderId: '949319058910',
+    projectId: 'kfupm-smart-bus',
+    databaseURL: 'https://kfupm-smart-bus-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'kfupm-smart-bus.firebasestorage.app',
+    iosBundleId: 'kfupm.smart.bus',
+  );
+
 }
