@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:kfupm_smart_bus_system/api/access_token.dart';
+import 'package:firebase_database/firebase_database.dart';
+
+final databaseRef = FirebaseDatabase.instance.ref();
 
 final busIds = [
   276,
@@ -68,7 +71,10 @@ final busIds = [
   9
 ];
 
+String? apiToken;
+
 Future<List> getAssetsLatestPositions() async {
+  apiToken ??= await getAccessTokenFromFirebase();
   final url = Uri.parse(
       'https://api.eagle-iot.com/v2/Tracking/GetAssetsLatestPositions');
   final response = await http.post(
