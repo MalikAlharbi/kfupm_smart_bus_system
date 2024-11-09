@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kfupm_smart_bus_system/screens/track_bus.dart';
 import 'package:kfupm_smart_bus_system/screens/widget_main.dart';
 
 class LoadingScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     Future.delayed(Duration(seconds: 4), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Widgetmain()),
+        MaterialPageRoute(builder: (context) => TrackBus()),
       );
     });
   }
@@ -26,7 +27,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
       body: Center(
         child: ColorFiltered(
               colorFilter: const ColorFilter.mode(
-                Colors.green,
+                Color(0xFF179C3D),
                 BlendMode.srcIn,
               ),
               child: Image.asset(

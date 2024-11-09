@@ -27,7 +27,6 @@ class _RequestBusState extends State<RequestBus> {
         appBar: AppBar(
           flexibleSpace: TopAppBar(),
         ),
-        bottomNavigationBar: BottomBar(),
         body: Column(
           children: [
             // First child: Column with 3 sub-children
@@ -117,7 +116,7 @@ class _RequestBusState extends State<RequestBus> {
                         onPressed: () {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
-                              builder: (ctx) => const RequestHistoryScreen(),
+                              builder: (ctx) =>  RequestHistoryScreen(),
                             ),
                           );
                         },

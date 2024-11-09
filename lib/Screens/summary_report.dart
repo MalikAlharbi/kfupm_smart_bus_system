@@ -29,7 +29,6 @@ Widget _generateSummaryReport(BuildContext context) {
       appBar: AppBar(
         flexibleSpace: TopAppBar(),
       ),
-      bottomNavigationBar: const BottomBar(),
       body: Column(
         children: [
           Expanded(

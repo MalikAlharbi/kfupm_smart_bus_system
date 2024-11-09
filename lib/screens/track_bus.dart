@@ -5,6 +5,9 @@ import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
 import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
 import 'dart:async';
 
+import 'package:kfupm_smart_bus_system/screens/contact_us.dart';
+import 'package:kfupm_smart_bus_system/screens/request_history.dart';
+
 class TrackBus extends StatefulWidget {
   const TrackBus({super.key});
 
@@ -61,29 +64,79 @@ class _TrackBusState extends State<TrackBus> {
     _getBusesLocation();
   }
 
+  int _currentIndex = 1; // Default index for the "Smart Buses" screen
+
+  void _onItemTapped(int index) {
+    // Check if the selected index is different from the current index
+    if (index != _currentIndex) {
+      setState(() {
+        _currentIndex = index;
+      });
+
+      // Navigate based on the selected index
+      switch (index) {
+        case 0:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => RequestHistoryScreen()),
+          );
+          break;
+        case 1:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const TrackBus()),
+          );
+          break;
+        case 2:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const ContactUs()),
+          );
+          break;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        minimum: const EdgeInsets.all(5),
-        child: Scaffold(
-          appBar: AppBar(
-            flexibleSpace: TopAppBar(),
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: const Text("Smart Buses"),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
-          bottomNavigationBar: BottomBar(),
-          body: GoogleMap(
-            onMapCreated: _onMapCreated,
-            initialCameraPosition: CameraPosition(
-              target: kfupmCenter,
-              zoom: 15.0,
-            ),
-            minMaxZoomPreference: const MinMaxZoomPreference(15.0, 21.0),
-            cameraTargetBounds: CameraTargetBounds(kfupmBounds),
-            //Restrict to 2D movment only
-            compassEnabled: false,
-            tiltGesturesEnabled: false,
-            rotateGesturesEnabled: false,
-            markers: Set.from(_markers),
-          ),
-        ));
+        ),
+        body: Container(
+          color: Colors.grey[200], // Placeholder for map or content
+        ),
+        bottomNavigationBar: BottomBar(
+            currentIndex: _currentIndex, onItemSelected: _onItemTapped));
+
+    // return SafeArea(
+    //     minimum: const EdgeInsets.all(5),
+    //     child: Scaffold(
+    //       appBar: AppBar(
+    //         flexibleSpace: TopAppBar(),
+    //       ),
+    //       bottomNavigationBar: BottomBar(),
+    //       body: GoogleMap(
+    //         onMapCreated: _onMapCreated,
+    //         initialCameraPosition: CameraPosition(
+    //           target: kfupmCenter,
+    //           zoom: 15.0,
+    //         ),
+    //         minMaxZoomPreference: const MinMaxZoomPreference(15.0, 21.0),
+    //         cameraTargetBounds: CameraTargetBounds(kfupmBounds),
+    //         //Restrict to 2D movment only
+    //         compassEnabled: false,
+    //         tiltGesturesEnabled: false,
+    //         rotateGesturesEnabled: false,
+    //         markers: Set.from(_markers),
+    //       ),
+    //     ));
   }
 }

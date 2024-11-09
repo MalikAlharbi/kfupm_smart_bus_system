@@ -22,7 +22,6 @@ class Widgetmain extends StatelessWidget {
           appBar: AppBar(
             flexibleSpace: TopAppBar(),
           ),
-          bottomNavigationBar: BottomBar(),
           body: SafeArea(
             child: Column(
               children: [

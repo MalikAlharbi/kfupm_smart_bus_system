@@ -47,7 +47,6 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
         appBar: AppBar(
           flexibleSpace: TopAppBar(),
         ),
-        bottomNavigationBar: const BottomBar(),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(30.0),
           child: Column(
