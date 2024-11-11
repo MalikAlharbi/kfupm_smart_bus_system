@@ -4,20 +4,64 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
-import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
+import 'package:kfupm_smart_bus_system/screens/events_screen.dart';
+import 'package:kfupm_smart_bus_system/screens/request_bus.dart';
+import 'package:kfupm_smart_bus_system/screens/track_bus.dart';
 
 class ReportProblemScreen extends StatefulWidget {
+  const ReportProblemScreen({super.key});
   @override
-  _ReportProblemScreenState createState() => _ReportProblemScreenState();
+  State<ReportProblemScreen> createState() => _ReportProblemScreenState();
 }
 
 class _ReportProblemScreenState extends State<ReportProblemScreen> {
   String _selectedProblemType = 'Non-Technical Problem';
-  TextEditingController _busNumberController = TextEditingController();
-  TextEditingController _problemDescriptionController = TextEditingController();
+  final TextEditingController _busNumberController = TextEditingController();
+  final TextEditingController _problemDescriptionController =
+      TextEditingController();
   bool isVisible = true;
-  bool CameraVisible = false;
+  bool cameraVisible = false;
   File? image;
+
+  int _currentIndex = 3; // Default index for the "Smart Buses" screen
+
+  void _onItemTapped(int index) {
+    // Check if the selected index is different from the current index
+    if (index != _currentIndex) {
+      setState(() {
+        _currentIndex = index;
+      });
+
+      // Navigate based on the selected index
+      switch (index) {
+        case 0:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const RequestBus()),
+          );
+          break;
+        case 1:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const EventsScreen()),
+          );
+          break;
+        case 2:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const TrackBus()),
+          );
+          break;
+        case 3:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const ReportProblemScreen()),
+          );
+          break;
+      }
+    }
+  }
 
   Future pickImage() async {
     try {
@@ -41,125 +85,70 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      minimum: const EdgeInsets.all(5),
-      child: Scaffold(
-        appBar: AppBar(
-          flexibleSpace: TopAppBar(),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: const Text("Smart Buses"),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(30.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  color: Colors.green,
-                ),
-                child: const Center(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'Report Problem',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold),
-                        ),
+      ),
+      bottomNavigationBar:
+          BottomBar(currentIndex: _currentIndex, onItemSelected: _onItemTapped),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(27.0),
+        child: Column(
+          children: [
+            Card(
+              elevation: 8,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Problem Type',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<String>(
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       ),
-                    ],
-                  ),
+                      value: _selectedProblemType,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedProblemType = newValue!;
+                          isVisible =
+                              newValue == "Technical Problem" ? false : true;
+                          changedState(isVisible);
+                        });
+                      },
+                      items: <String>[
+                        'Non-Technical Problem',
+                        'Technical Problem'
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
               ),
-              Card(
-                elevation: 8,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Problem Type',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8),
-                      DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        ),
-                        value: _selectedProblemType,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedProblemType = newValue!;
-                            isVisible =
-                                newValue == "Technical Problem" ? false : true;
-                            changedState(isVisible);
-                          });
-                        },
-                        items: <String>[
-                          'Non-Technical Problem',
-                          'Technical Problem'
-                        ].map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+            ),
 
-              SizedBox(height: 16),
-              ElevatedButton.icon(
-                icon: const Icon(
-                  Icons.camera_alt,
-                  color: Colors.black,
-                ),
-                label: const Text(
-                  'Provide Screenshot',
-                  style: TextStyle(color: Colors.white, fontSize: 22),
-                ),
-                onPressed: () {
-                  // Implement screenshot functionality
-                  pickImage();
-                  CameraVisible = true;
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                ),
-              ),
-              // const SizedBox(height: 16),
+            const SizedBox(height: 16),
 
-              Visibility(
-                visible: CameraVisible,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20, right: 20, top: 16, bottom: 0),
-                  child: image != null
-                      ? Image.file(
-                          image!,
-                          width: 160,
-                          height: 160,
-                          fit: BoxFit.cover,
-                        )
-                      : const SizedBox(
-                          height: 0,
-                        ),
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              Visibility(
+            Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: Visibility(
                 visible: isVisible,
                 child: TextField(
                   controller: _busNumberController,
@@ -171,9 +160,12 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                   keyboardType: TextInputType.number,
                 ),
               ),
+            ),
 
-              SizedBox(height: 16),
-              TextField(
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: TextField(
                 controller: _problemDescriptionController,
                 decoration: const InputDecoration(
                   labelText: 'Explain the Problem',
@@ -182,23 +174,68 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                 ),
                 maxLines: 5,
               ),
-              SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () {
-                  // Implement submit functionality
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  textStyle: const TextStyle(fontSize: 18),
-                ),
-                child: const Text(
-                  'Submit',
-                  style: TextStyle(color: Colors.white),
+            ),
+            const SizedBox(height: 16),
+
+            ElevatedButton.icon(
+              icon: const Icon(
+                Icons.camera_alt,
+                color: Colors.black,
+              ),
+              label: const Text(
+                'Provide Screenshot',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+              onPressed: () {
+                // Implement screenshot functionality
+                pickImage();
+                cameraVisible = true;
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+              ),
+            ),
+            // const SizedBox(height: 16),
+
+            Visibility(
+              visible: cameraVisible,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 20, right: 20, top: 16, bottom: 0),
+                child: image != null
+                    ? Image.file(
+                        image!,
+                        width: 160,
+                        height: 160,
+                        fit: BoxFit.cover,
+                      )
+                    : const SizedBox(
+                        height: 0,
+                      ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                // Implement submit functionality
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 100),
+                textStyle: const TextStyle(
+                  fontSize: 23,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ],
-          ),
+              child: const Text(
+                'Submit',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
         ),
       ),
     );

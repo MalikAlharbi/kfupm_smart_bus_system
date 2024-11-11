@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
 import 'package:kfupm_smart_bus_system/screens/contact_us.dart';
+import 'package:kfupm_smart_bus_system/screens/report_problem_screen.dart';
 import 'package:kfupm_smart_bus_system/screens/request_bus.dart';
 import 'package:kfupm_smart_bus_system/screens/track_bus.dart';
 
@@ -31,7 +32,7 @@ class _EventsScreenState extends State<EventsScreen> {
         case 1:
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => EventsScreen()),
+            MaterialPageRoute(builder: (context) => const EventsScreen()),
           );
           break;
         case 2:
@@ -43,7 +44,7 @@ class _EventsScreenState extends State<EventsScreen> {
         case 3:
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const ContactUs()),
+            MaterialPageRoute(builder: (context) => const ReportProblemScreen()),
           );
           break;
       }
@@ -68,7 +69,7 @@ class _EventsScreenState extends State<EventsScreen> {
         onItemSelected: _onItemTapped,
       ),
       body: const Center(
-        child: Text('Contact Us'),
+        child: Text('events screen'),
       ),
     );
   }

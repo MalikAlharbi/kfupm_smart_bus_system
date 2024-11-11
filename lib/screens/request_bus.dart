@@ -5,6 +5,7 @@ import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
 import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
 import 'package:kfupm_smart_bus_system/screens/contact_us.dart';
 import 'package:kfupm_smart_bus_system/screens/events_screen.dart';
+import 'package:kfupm_smart_bus_system/screens/report_problem_screen.dart';
 import 'package:kfupm_smart_bus_system/screens/track_bus.dart';
 import 'package:kfupm_smart_bus_system/special_buttons/date_picker_button.dart';
 import 'package:uuid/uuid.dart';
@@ -42,7 +43,7 @@ class _RequestBusState extends State<RequestBus> {
         case 1:
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => EventsScreen()),
+            MaterialPageRoute(builder: (context) => const EventsScreen()),
           );
           break;
         case 2:
@@ -54,7 +55,7 @@ class _RequestBusState extends State<RequestBus> {
         case 3:
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const ContactUs()),
+            MaterialPageRoute(builder: (context) => const ReportProblemScreen()),
           );
           break;
       }
@@ -103,7 +104,8 @@ class _RequestBusState extends State<RequestBus> {
                 ),
 
                 // a button that allows the user to enter a specific date and store the date recieved
-                Container(child: DatePickerButton()),
+                DatePickerButton(),
+                
                 const SizedBox(
                   height: 8,
                 ),
@@ -136,16 +138,16 @@ class _RequestBusState extends State<RequestBus> {
             const Column(
               children: [
                 TextFieldBus(
-                  title: 'KFUPM ID:',
+                  title: 'KFUPM ID',
                 ),
                 TextFieldBus(
-                  title: 'Purpose:',
+                  title: 'Purpose',
                 ),
                 TextFieldBus(
-                  title: 'Destination:',
+                  title: 'Destination',
                 ),
                 TextFieldBus(
-                  title: 'Time: ',
+                  title: 'Time',
                 ),
               ],
             ),
@@ -162,9 +164,9 @@ class _RequestBusState extends State<RequestBus> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF179C3D)),
                         onPressed: () {
-                          Navigator.of(context).pushReplacement(
+                          Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (ctx) => RequestHistoryScreen(),
+                              builder: (ctx) => const RequestHistoryScreen(),
                             ),
                           );
                         },

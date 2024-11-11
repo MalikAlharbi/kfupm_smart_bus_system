@@ -26,7 +26,7 @@ class _DatePickerButtonState extends State<DatePickerButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 220,
       child: ElevatedButton(
         onPressed: () => _selectDate(context),
