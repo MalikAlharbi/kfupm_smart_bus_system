@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
-import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
-import 'package:kfupm_smart_bus_system/screens/events_screen.dart';
+import 'package:kfupm_smart_bus_system/screens/contact_us.dart';
 import 'package:kfupm_smart_bus_system/screens/request_bus.dart';
-import 'package:kfupm_smart_bus_system/screens/request_history.dart';
 import 'package:kfupm_smart_bus_system/screens/track_bus.dart';
 
-class ContactUs extends StatefulWidget {
-  const ContactUs({super.key});
+class EventsScreen extends StatefulWidget {
+  const EventsScreen({super.key});
   @override
-  State<ContactUs> createState() => _ContactUsState();
+  State<EventsScreen> createState() => _EventsScreenState();
 }
 
-class _ContactUsState extends State<ContactUs> {
-  int _currentIndex = 3; // Default index for the "Smart Buses" screen
+class _EventsScreenState extends State<EventsScreen> {
+  int _currentIndex = 1; // Default index for the "Smart Buses" screen
 
   void _onItemTapped(int index) {
     // Check if the selected index is different from the current index
@@ -65,8 +63,10 @@ class _ContactUsState extends State<ContactUs> {
           },
         ),
       ),
-      bottomNavigationBar:
-          BottomBar(currentIndex: _currentIndex, onItemSelected: _onItemTapped),
+      bottomNavigationBar: BottomBar(
+        currentIndex: _currentIndex,
+        onItemSelected: _onItemTapped,
+      ),
       body: const Center(
         child: Text('Contact Us'),
       ),

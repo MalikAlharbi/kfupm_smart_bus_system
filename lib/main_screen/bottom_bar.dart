@@ -11,42 +11,37 @@ class BottomBar extends StatelessWidget {
     required this.currentIndex,
     required this.onItemSelected,
   });
-
   
-
-  Widget _buildIconButton(IconData icon, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      child: Icon(
-        icon,
-        size: 32,
-        color: Colors.white,
-      ),
-    );
-  }
 
   @override
   Widget build(context) {
     return BottomNavigationBar(
-      backgroundColor: Colors.white ,
-      selectedItemColor:  const Color(0xFF179C3D),
-      unselectedItemColor: const Color.fromARGB(153, 58, 222, 88),
-      currentIndex: currentIndex,
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.history),
-          label: "Events",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.directions_bus),
-          label: "Track",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.contact_page),
-          label: "Contact Us",
-        ),
-      ],
-      onTap: onItemSelected,
+  type: BottomNavigationBarType.fixed, // Ensures consistent label display
+  backgroundColor: Colors.white,
+  selectedItemColor: const Color(0xFF179C3D),
+  unselectedItemColor: const Color.fromARGB(153, 58, 222, 88),
+  currentIndex: currentIndex,
+  showSelectedLabels: true, // Ensures selected labels are shown
+  showUnselectedLabels: true, // Ensures unselected labels are shown
+  items: const [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.new_label, size: 24),
+      label: "Request",
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.event, size: 24),
+      label: "Events",
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.directions_bus, size: 24),
+      label: "Track",
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.report_problem, size: 24),
+      label: "Report",
+    ),
+  ],
+  onTap: onItemSelected,
     );
 
     // return Container(

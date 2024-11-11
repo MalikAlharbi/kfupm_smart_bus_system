@@ -6,6 +6,8 @@ import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
 import 'dart:async';
 
 import 'package:kfupm_smart_bus_system/screens/contact_us.dart';
+import 'package:kfupm_smart_bus_system/screens/events_screen.dart';
+import 'package:kfupm_smart_bus_system/screens/request_bus.dart';
 import 'package:kfupm_smart_bus_system/screens/request_history.dart';
 
 class TrackBus extends StatefulWidget {
@@ -64,7 +66,7 @@ class _TrackBusState extends State<TrackBus> {
     _getBusesLocation();
   }
 
-  int _currentIndex = 1; // Default index for the "Smart Buses" screen
+  int _currentIndex = 2; // Default index for the "Smart Buses" screen
 
   void _onItemTapped(int index) {
     // Check if the selected index is different from the current index
@@ -78,16 +80,22 @@ class _TrackBusState extends State<TrackBus> {
         case 0:
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => RequestHistoryScreen()),
+            MaterialPageRoute(builder: (context) => const RequestBus()),
           );
           break;
         case 1:
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const TrackBus()),
+            MaterialPageRoute(builder: (context) => EventsScreen()),
           );
           break;
         case 2:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const TrackBus()),
+          );
+          break;
+        case 3:
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const ContactUs()),
@@ -114,7 +122,9 @@ class _TrackBusState extends State<TrackBus> {
           color: Colors.grey[200], // Placeholder for map or content
         ),
         bottomNavigationBar: BottomBar(
-            currentIndex: _currentIndex, onItemSelected: _onItemTapped));
+          currentIndex: _currentIndex,
+          onItemSelected: _onItemTapped,
+        ));
 
     // return SafeArea(
     //     minimum: const EdgeInsets.all(5),

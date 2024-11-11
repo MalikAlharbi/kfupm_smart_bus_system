@@ -6,45 +6,9 @@ import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
 import 'package:kfupm_smart_bus_system/screens/contact_us.dart';
 import 'package:kfupm_smart_bus_system/screens/track_bus.dart';
 
-class RequestHistoryScreen extends StatefulWidget {
-  @override
-  State<RequestHistoryScreen> createState() => _RequestHistoryScreenState();
-}
-
-class _RequestHistoryScreenState extends State<RequestHistoryScreen> {
-  int _currentIndex = 0; // Default index for the "Smart Buses" screen
-
-  void _onItemTapped(int index) {
-    // Check if the selected index is different from the current index
-    if (index != _currentIndex) {
-      setState(() {
-        _currentIndex = index;
-      });
-
-      // Navigate based on the selected index
-      switch (index) {
-        case 0:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => RequestHistoryScreen()),
-          );
-          break;
-        case 1:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => TrackBus()),
-          );
-          break;
-        case 2:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => ContactUs()),
-          );
-          break;
-      }
-    }
-  }
-
+class RequestHistoryScreen extends StatelessWidget{
+  const RequestHistoryScreen({super.key});
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +22,6 @@ class _RequestHistoryScreenState extends State<RequestHistoryScreen> {
           },
         ),
       ),
-      bottomNavigationBar: BottomBar(currentIndex: _currentIndex, onItemSelected: _onItemTapped),
       body: ListView(
           children: [
             InkWell(
