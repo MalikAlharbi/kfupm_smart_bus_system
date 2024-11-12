@@ -102,81 +102,130 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
         padding: const EdgeInsets.all(27.0),
         child: Column(
           children: [
-            Card(
-              elevation: 8,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Problem Type',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8),
-                    DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      ),
-                      value: _selectedProblemType,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedProblemType = newValue!;
-                          isVisible =
-                              newValue == "Technical Problem" ? false : true;
-                          changedState(isVisible);
-                        });
-                      },
-                      items: <String>[
-                        'Non-Technical Problem',
-                        'Technical Problem'
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ],
+            DropdownButtonFormField<String>(
+              decoration: const InputDecoration(
+                labelText: 'Bus Number',
+                labelStyle: TextStyle(
+                    color: Colors.green,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green, width: 2),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  gapPadding: 8,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green, width: 2),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  gapPadding: 8,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green, width: 2),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  gapPadding: 8,
                 ),
               ),
+              value: _selectedProblemType,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedProblemType = newValue!;
+                  isVisible = newValue == "Technical Problem" ? false : true;
+                  changedState(isVisible);
+                });
+              },
+              items: <String>['Non-Technical Problem', 'Technical Problem']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
-
-            const SizedBox(height: 16),
-
-            Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: Visibility(
-                visible: isVisible,
-                child: TextField(
-                  controller: _busNumberController,
-                  decoration: const InputDecoration(
-                    labelText: 'Bus Number',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.directions_bus),
-                  ),
-                  keyboardType: TextInputType.number,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.all(3.0),
+            const SizedBox(height: 40),
+            Visibility(
+              visible: isVisible,
               child: TextField(
-                controller: _problemDescriptionController,
+                controller: _busNumberController,
                 decoration: const InputDecoration(
-                  labelText: 'Explain the Problem',
-                  border: OutlineInputBorder(),
-                  alignLabelWithHint: true,
+                  labelText: 'Bus Number',
+                  labelStyle: TextStyle(
+                      color: Colors.green,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green, width: 2),
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    gapPadding: 8,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green, width: 2),
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    gapPadding: 8,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green, width: 2),
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    gapPadding: 8,
+                  ),
                 ),
-                maxLines: 5,
+                keyboardType: TextInputType.number,
+              ),
+            ),
+            const SizedBox(height: 40),
+            TextField(
+              controller: _problemDescriptionController,
+              decoration: const InputDecoration(
+                labelText: 'Explain the Problem',
+                labelStyle: TextStyle(
+                    color: Colors.green,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green, width: 2),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  gapPadding: 8,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green, width: 2),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  gapPadding: 8,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green, width: 2),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  gapPadding: 8,
+                ),
+              ),
+              maxLines: 5,
+            ),
+            const SizedBox(height: 16),
+            Visibility(
+              visible: cameraVisible,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 20, right: 20, top: 16, bottom: 0),
+                child: image != null
+                    ? Image.file(
+                        image!,
+                        width: 160,
+                        height: 160,
+                        fit: BoxFit.cover,
+                      )
+                    : const SizedBox(
+                        height: 0,
+                      ),
               ),
             ),
             const SizedBox(height: 16),
-
             ElevatedButton.icon(
               icon: const Icon(
                 Icons.camera_alt,
@@ -195,25 +244,6 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                 backgroundColor: Colors.green,
                 padding:
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-              ),
-            ),
-            // const SizedBox(height: 16),
-
-            Visibility(
-              visible: cameraVisible,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 20, right: 20, top: 16, bottom: 0),
-                child: image != null
-                    ? Image.file(
-                        image!,
-                        width: 160,
-                        height: 160,
-                        fit: BoxFit.cover,
-                      )
-                    : const SizedBox(
-                        height: 0,
-                      ),
               ),
             ),
             const SizedBox(height: 24),
