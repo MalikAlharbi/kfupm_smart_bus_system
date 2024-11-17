@@ -49,7 +49,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBpXCDLaFR3w-tnTR_gMlsUuF5bdPUsnKI',
-    appId: '1:949319058910:android:d8bbcd3e55e6f8f8c7894f',
+    appId: '1:949319058910:android:f5482da023500b09c7894f',
     messagingSenderId: '949319058910',
     projectId: 'kfupm-smart-bus',
     databaseURL: 'https://kfupm-smart-bus-default-rtdb.europe-west1.firebasedatabase.app',

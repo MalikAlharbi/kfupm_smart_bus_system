@@ -8,6 +8,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:949319058910:android:f5482da023500b09c7894f",
+        "android_client_info": {
+          "package_name": "com.example.kfupmSmartBusSystem"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpXCDLaFR3w-tnTR_gMlsUuF5bdPUsnKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:949319058910:android:d8bbcd3e55e6f8f8c7894f",
         "android_client_info": {
           "package_name": "kfupm.smart.bus"
