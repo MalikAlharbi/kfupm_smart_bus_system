@@ -71,10 +71,10 @@ final busIds = [
   9
 ];
 
-String? apiToken;
+String? apiToken = '';
 
 Future<List> getAssetsLatestPositions() async {
-  apiToken ??= await getAccessTokenFromFirebase();
+  apiToken = await getAccessTokenFromFirebase();
   final url = Uri.parse(
       'https://api.eagle-iot.com/v2/Tracking/GetAssetsLatestPositions');
   final response = await http.post(
