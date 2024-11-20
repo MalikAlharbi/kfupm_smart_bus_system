@@ -87,14 +87,16 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text("Smart Buses"),
+        title: const Text(
+          'Smart Buses',
+          style: TextStyle(color: Colors.white),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
+        backgroundColor: Colors.green[700],
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       bottomNavigationBar:
           BottomBar(currentIndex: _currentIndex, onItemSelected: _onItemTapped),
@@ -104,29 +106,12 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
           children: [
             DropdownButtonFormField<String>(
               decoration: const InputDecoration(
-                labelText: 'Bus Number',
+                labelText: 'Problem Type',
                 labelStyle: TextStyle(
-                    color: Colors.green,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.green, width: 2),
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                  gapPadding: 8,
+                  fontSize: 20,
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.green, width: 2),
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                  gapPadding: 8,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.green, width: 2),
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                  gapPadding: 8,
-                ),
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.report_problem_outlined),
               ),
               value: _selectedProblemType,
               onChanged: (String? newValue) {
@@ -151,28 +136,9 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                 controller: _busNumberController,
                 decoration: const InputDecoration(
                   labelText: 'Bus Number',
-                  labelStyle: TextStyle(
-                      color: Colors.green,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 2),
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    gapPadding: 8,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 2),
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    gapPadding: 8,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 2),
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    gapPadding: 8,
-                  ),
+                  labelStyle: TextStyle(fontSize: 20),
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.directions_bus),
                 ),
                 keyboardType: TextInputType.number,
               ),
@@ -181,31 +147,12 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
             TextField(
               controller: _problemDescriptionController,
               decoration: const InputDecoration(
-                labelText: 'Explain the Problem',
-                labelStyle: TextStyle(
-                    color: Colors.green,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.green, width: 2),
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                  gapPadding: 8,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.green, width: 2),
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                  gapPadding: 8,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.green, width: 2),
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                  gapPadding: 8,
-                ),
+                labelText: 'Explain the problem',
+                labelStyle: TextStyle(fontSize: 20),
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.directions_bus),
               ),
-              maxLines: 5,
+              maxLines: 3,
             ),
             const SizedBox(height: 16),
             Visibility(

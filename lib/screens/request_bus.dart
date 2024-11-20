@@ -40,12 +40,52 @@ class _RequestBusState extends State<RequestBus> {
     // Add more clubs as needed
   ];
 
+  int _currentIndex = 0; // Default index for the "Smart Buses" screen
+
+  void _onItemTapped(int index) {
+    // Check if the selected index is different from the current index
+    if (index != _currentIndex) {
+      setState(() {
+        _currentIndex = index;
+      });
+
+      // Navigate based on the selected index
+      switch (index) {
+        case 0:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const RequestBus()),
+          );
+          break;
+        case 1:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const EventsScreen()),
+          );
+          break;
+        case 2:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const TrackBus()),
+          );
+          break;
+        case 3:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const ReportProblemScreen()),
+          );
+          break;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Request a Bus',
+          'Smart Buses',
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -62,7 +102,7 @@ class _RequestBusState extends State<RequestBus> {
             // Dropdown for selecting club
             DropdownButtonFormField<String>(
               value: selectedClub,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Select Club',
                 border: OutlineInputBorder(),
                 prefixIcon: const Icon(Icons.group),
@@ -116,7 +156,8 @@ class _RequestBusState extends State<RequestBus> {
           ],
         ),
       ),
-      bottomNavigationBar: buildBottomNavigationBar(context, 0),
+      bottomNavigationBar:
+          BottomBar(currentIndex: _currentIndex, onItemSelected: _onItemTapped),
     );
   }
 }
@@ -197,7 +238,6 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
           buildNewRequestForm(context),
         ],
       ),
-      bottomNavigationBar: buildBottomNavigationBar(context, 1),
     );
   }
 
@@ -251,6 +291,7 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
       child: SingleChildScrollView(
         child: Column(
           children: [
+            const SizedBox(height: 5),
             // Date Picker Field
             buildDatePickerField(context, 'Select Date', dateController),
             const SizedBox(height: 20),
@@ -346,6 +387,9 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
       readOnly: true,
       decoration: InputDecoration(
         labelText: label,
+        labelStyle: const TextStyle(
+          fontSize: 20,
+        ),
         border: const OutlineInputBorder(),
         prefixIcon: const Icon(Icons.calendar_today),
       ),
@@ -382,6 +426,7 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
       readOnly: true,
       decoration: InputDecoration(
         labelText: label,
+        labelStyle: TextStyle(fontSize: 20),
         border: const OutlineInputBorder(),
         prefixIcon: const Icon(Icons.access_time),
       ),
@@ -426,6 +471,7 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
         maxLines: maxLines,
         decoration: InputDecoration(
           labelText: label,
+          labelStyle: TextStyle(fontSize: 20),
           border: const OutlineInputBorder(),
           prefixIcon: icon != null ? Icon(icon) : null,
         ),

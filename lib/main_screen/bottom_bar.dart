@@ -19,7 +19,6 @@ class BottomBar extends StatelessWidget {
   type: BottomNavigationBarType.fixed, // Ensures consistent label display
   backgroundColor: Colors.white,
   selectedItemColor: const Color(0xFF179C3D),
-  unselectedItemColor: const Color.fromARGB(153, 58, 222, 88),
   currentIndex: currentIndex,
   showSelectedLabels: true, // Ensures selected labels are shown
   showUnselectedLabels: true, // Ensures unselected labels are shown
