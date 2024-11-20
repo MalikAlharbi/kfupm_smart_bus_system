@@ -105,7 +105,7 @@ class _RequestBusState extends State<RequestBus> {
               decoration: const InputDecoration(
                 labelText: 'Select Club',
                 border: OutlineInputBorder(),
-                prefixIcon: const Icon(Icons.group),
+                prefixIcon: Icon(Icons.group),
               ),
               items: clubs.map((club) {
                 return DropdownMenuItem(
@@ -123,10 +123,10 @@ class _RequestBusState extends State<RequestBus> {
             // TextField for entering key
             TextField(
               controller: keyController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Enter Key',
-                border: const OutlineInputBorder(),
-                prefixIcon: const Icon(Icons.vpn_key),
+                border:  OutlineInputBorder(),
+                prefixIcon: Icon(Icons.vpn_key),
               ),
               obscureText: true,
             ),
@@ -163,10 +163,10 @@ class _RequestBusState extends State<RequestBus> {
 }
 
 class RequestBusDetailsPage extends StatefulWidget {
-  const RequestBusDetailsPage({Key? key}) : super(key: key);
+  const RequestBusDetailsPage({super.key});
 
   @override
-  _RequestBusDetailsPageState createState() => _RequestBusDetailsPageState();
+  State<RequestBusDetailsPage> createState() => _RequestBusDetailsPageState();
 }
 
 class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
@@ -223,6 +223,7 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
           labelColor: Colors.white, // Selected tab text color
           unselectedLabelColor: Colors.white70, // Unselected tab text color
           indicatorColor: Colors.white,
+          labelStyle: const TextStyle(fontSize: 17),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -365,7 +366,10 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
                   );
                 },
                 icon: const Icon(Icons.send),
-                label: const Text('Submit Request'),
+                label: const Text(
+                  'Submit Request',
+                  style: TextStyle(fontSize: 20),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green[700],
                   foregroundColor: Colors.white, // Text color set to white
@@ -388,7 +392,7 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(
-          fontSize: 20,
+          fontSize: 19,
         ),
         border: const OutlineInputBorder(),
         prefixIcon: const Icon(Icons.calendar_today),
@@ -426,7 +430,9 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
       readOnly: true,
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(fontSize: 20),
+        labelStyle: const TextStyle(
+          fontSize: 19,
+        ),
         border: const OutlineInputBorder(),
         prefixIcon: const Icon(Icons.access_time),
       ),
@@ -471,7 +477,7 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
         maxLines: maxLines,
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: TextStyle(fontSize: 20),
+          labelStyle: const TextStyle(fontSize: 19),
           border: const OutlineInputBorder(),
           prefixIcon: icon != null ? Icon(icon) : null,
         ),

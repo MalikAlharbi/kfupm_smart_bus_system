@@ -108,7 +108,7 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
               decoration: const InputDecoration(
                 labelText: 'Problem Type',
                 labelStyle: TextStyle(
-                  fontSize: 20,
+                  fontSize: 19,
                 ),
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.report_problem_outlined),
@@ -129,26 +129,33 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                 );
               }).toList(),
             ),
-            const SizedBox(height: 40),
+            Visibility(
+              visible: isVisible,
+              child: const SizedBox(height: 20),
+            ),
             Visibility(
               visible: isVisible,
               child: TextField(
                 controller: _busNumberController,
                 decoration: const InputDecoration(
                   labelText: 'Bus Number',
-                  labelStyle: TextStyle(fontSize: 20),
+                  labelStyle: TextStyle(
+                    fontSize: 19,
+                  ),
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.directions_bus),
                 ),
                 keyboardType: TextInputType.number,
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
             TextField(
               controller: _problemDescriptionController,
               decoration: const InputDecoration(
                 labelText: 'Explain the problem',
-                labelStyle: TextStyle(fontSize: 20),
+                labelStyle: TextStyle(
+                  fontSize: 19,
+                ),
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.directions_bus),
               ),
@@ -176,7 +183,7 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
             ElevatedButton.icon(
               icon: const Icon(
                 Icons.camera_alt,
-                color: Colors.black,
+                color: Colors.white,
               ),
               label: const Text(
                 'Provide Screenshot',
@@ -188,27 +195,48 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                 cameraVisible = true;
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
+                backgroundColor: Colors.green[700],
                 padding:
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
               ),
             ),
             const SizedBox(height: 24),
-            ElevatedButton(
+            ElevatedButton.icon(
               onPressed: () {
-                // Implement submit functionality
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Report Sent'),
+                    content: Icon(
+                      Icons.check_circle_outline,
+                      color: Colors.green[700],
+                      size: 100,
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
+                backgroundColor: Colors.green[700],
                 padding:
-                    const EdgeInsets.symmetric(vertical: 16, horizontal: 100),
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 60),
                 textStyle: const TextStyle(
-                  fontSize: 23,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
                 ),
               ),
-              child: const Text(
-                'Submit',
+              icon: const Icon(
+                Icons.send,
+                color: Colors.white,
+              ),
+              label: const Text(
+                'Submit Report',
                 style: TextStyle(color: Colors.white),
               ),
             ),
