@@ -99,7 +99,8 @@ class _TrackBusState extends State<TrackBus> {
         case 3:
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const ReportProblemScreen()),
+            MaterialPageRoute(
+                builder: (context) => const ReportProblemScreen()),
           );
           break;
       }
@@ -119,8 +120,19 @@ class _TrackBusState extends State<TrackBus> {
             },
           ),
         ),
-        body: Container(
-          color: Colors.grey[200], // Placeholder for map or content
+        body: GoogleMap(
+          onMapCreated: _onMapCreated,
+          initialCameraPosition: CameraPosition(
+            target: kfupmCenter,
+            zoom: 15.0,
+          ),
+          minMaxZoomPreference: const MinMaxZoomPreference(15.0, 21.0),
+          cameraTargetBounds: CameraTargetBounds(kfupmBounds),
+          //Restrict to 2D movment only
+          compassEnabled: false,
+          tiltGesturesEnabled: false,
+          rotateGesturesEnabled: false,
+          markers: Set.from(_markers),
         ),
         bottomNavigationBar: BottomBar(
           currentIndex: _currentIndex,
