@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
 import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ReportProblemScreen extends StatefulWidget {
   @override
@@ -18,6 +20,12 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
   bool isVisible = true;
   bool CameraVisible = false;
   File? image;
+
+  @override
+  void initState() {
+    super.initState();
+    Firebase.initializeApp(); 
+  }
 
   Future pickImage() async {
     try {
@@ -35,7 +43,7 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
 
   void changedState(bool isVisible) {
     setState(() {
-      isVisible = isVisible;
+      this.isVisible = isVisible;
     });
   }
 
@@ -98,8 +106,8 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                         onChanged: (String? newValue) {
                           setState(() {
                             _selectedProblemType = newValue!;
-                            isVisible =
-                                newValue == "Technical Problem" ? false : true;
+                            isVisible = 
+                            newValue == "Technical Problem" ? false : true;
                             changedState(isVisible);
                           });
                         },
@@ -117,8 +125,8 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                   ),
                 ),
               ),
-
-              SizedBox(height: 16),
+              
+               SizedBox(height: 16),
               ElevatedButton.icon(
                 icon: const Icon(
                   Icons.camera_alt,
@@ -129,7 +137,6 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                   style: TextStyle(color: Colors.white, fontSize: 22),
                 ),
                 onPressed: () {
-                  // Implement screenshot functionality
                   pickImage();
                   CameraVisible = true;
                 },
@@ -153,7 +160,7 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                           fit: BoxFit.cover,
                         )
                       : const SizedBox(
-                          height: 0,
+                        height: 0,
                         ),
                 ),
               ),
@@ -173,7 +180,7 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                 ),
               ),
 
-              SizedBox(height: 16),
+               SizedBox(height: 16),
               TextField(
                 controller: _problemDescriptionController,
                 decoration: const InputDecoration(
@@ -183,10 +190,10 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                 ),
                 maxLines: 5,
               ),
-              SizedBox(height: 24),
+               SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () {
-                  // Implement submit functionality
+                  submitReport();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
@@ -204,4 +211,37 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
       ),
     );
   }
+
+  Future<void> submitReport() async {
+    try {
+      final reportsCollection = FirebaseFirestore.instance.collection('report_problem');
+      final reportSnapshot = await reportsCollection.get();
+      final reportCount = reportSnapshot.size;
+      String documentId = "report_problem_${reportCount+1}";
+
+      await FirebaseFirestore.instance.collection('report_problem').doc(documentId).set({
+        'timestamp': FieldValue.serverTimestamp(),
+        'problemType': _selectedProblemType,
+        'busNumber': _busNumberController.text,
+        'problemDescription': _problemDescriptionController.text,
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Report submitted successfully")),
+      );
+
+      _busNumberController.clear();
+      _problemDescriptionController.clear();
+      setState(() {
+        _selectedProblemType = 'Non-Technical Problem';
+      });
+      
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to submit report: $e")),
+      );
+    }
+  }
+
 }
+
