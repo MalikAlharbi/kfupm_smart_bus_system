@@ -72,9 +72,10 @@ final busIds = [
 ];
 
 String? apiToken;
+bool tokenFound = false;
 
 Future<List> getAssetsLatestPositions() async {
-  apiToken ??= await getAccessTokenFromFirebase();
+  if (!tokenFound) apiToken = await getAccessTokenFromFirebase();
   final url = Uri.parse(
       'https://api.eagle-iot.com/v2/Tracking/GetAssetsLatestPositions');
   final response = await http.post(
@@ -87,6 +88,7 @@ Future<List> getAssetsLatestPositions() async {
   );
 
   if (response.statusCode == 200) {
+    tokenFound = true;
     final Map<String, dynamic> responseBody = jsonDecode(response.body);
     List<dynamic> dataReply = responseBody['data']['reply'];
     List<Object> busesLocation = [];
@@ -101,6 +103,7 @@ Future<List> getAssetsLatestPositions() async {
     }
     return busesLocation;
   } else if (response.statusCode == 403) {
+    tokenFound = false;
     await getAccessToken();
     return getAssetsLatestPositions();
   }
