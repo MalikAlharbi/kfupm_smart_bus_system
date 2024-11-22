@@ -18,7 +18,7 @@ migrate_working_dir/
 
 # env variables
 .env
-ios/Runner/Info.plist
+
 
 # IntelliJ related
 *.iml
