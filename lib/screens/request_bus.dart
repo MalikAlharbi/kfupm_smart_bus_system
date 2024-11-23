@@ -1,21 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:kfupm_smart_bus_system/Screens/request_history.dart';
-import 'package:kfupm_smart_bus_system/Widgets/text_field.dart';
-import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
-import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
-import 'package:kfupm_smart_bus_system/screens/contact_us.dart';
-import 'package:kfupm_smart_bus_system/screens/events_screen.dart';
-import 'package:kfupm_smart_bus_system/screens/report_problem_screen.dart';
-import 'package:kfupm_smart_bus_system/screens/track_bus.dart';
-import 'package:kfupm_smart_bus_system/special_buttons/date_picker_button.dart';
-import 'package:uuid/uuid.dart';
-import 'dart:math';
-
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 class RequestBus extends StatefulWidget {
   const RequestBus({Key? key}) : super(key: key);
 
@@ -40,61 +25,9 @@ class _RequestBusState extends State<RequestBus> {
     // Add more clubs as needed
   ];
 
-  int _currentIndex = 0; // Default index for the "Smart Buses" screen
-
-  void _onItemTapped(int index) {
-    // Check if the selected index is different from the current index
-    if (index != _currentIndex) {
-      setState(() {
-        _currentIndex = index;
-      });
-
-      // Navigate based on the selected index
-      switch (index) {
-        case 0:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const RequestBus()),
-          );
-          break;
-        case 1:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const EventsScreen()),
-          );
-          break;
-        case 2:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const TrackBus()),
-          );
-          break;
-        case 3:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const ReportProblemScreen()),
-          );
-          break;
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Smart Buses',
-          style: TextStyle(color: Colors.white),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-        backgroundColor: Colors.green[700],
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -104,13 +37,20 @@ class _RequestBusState extends State<RequestBus> {
               value: selectedClub,
               decoration: const InputDecoration(
                 labelText: 'Select Club',
-                border: OutlineInputBorder(),
+                labelStyle: TextStyle(
+                  fontSize: 19,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(16),
+                  ),
+                ),
                 prefixIcon: Icon(Icons.group),
               ),
               items: clubs.map((club) {
                 return DropdownMenuItem(
                   value: club,
-                  child: Text(club),
+                  child: Text(club, style: const TextStyle(fontSize: 19),),
                 );
               }).toList(),
               onChanged: (value) {
@@ -125,7 +65,14 @@ class _RequestBusState extends State<RequestBus> {
               controller: keyController,
               decoration: const InputDecoration(
                 labelText: 'Enter Key',
-                border:  OutlineInputBorder(),
+                labelStyle: TextStyle(
+                  fontSize: 19,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(16),
+                  ),
+                ),
                 prefixIcon: Icon(Icons.vpn_key),
               ),
               obscureText: true,
@@ -150,14 +97,17 @@ class _RequestBusState extends State<RequestBus> {
                   backgroundColor: Colors.green[700],
                   foregroundColor: Colors.white, // Text color set to white
                   padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      16,
+                    ), // Set your desired border radius
+                  ),
                 ),
               ),
             ),
           ],
         ),
       ),
-      bottomNavigationBar:
-          BottomBar(currentIndex: _currentIndex, onItemSelected: _onItemTapped),
     );
   }
 }
@@ -374,6 +324,11 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
                   backgroundColor: Colors.green[700],
                   foregroundColor: Colors.white, // Text color set to white
                   padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      16,
+                    ), // Set your desired border radius
+                  ),
                 ),
               ),
             ),
@@ -394,7 +349,11 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
         labelStyle: const TextStyle(
           fontSize: 19,
         ),
-        border: const OutlineInputBorder(),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(16),
+          ),
+        ),
         prefixIcon: const Icon(Icons.calendar_today),
       ),
       onTap: () async {
@@ -433,7 +392,11 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
         labelStyle: const TextStyle(
           fontSize: 19,
         ),
-        border: const OutlineInputBorder(),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(16),
+          ),
+        ),
         prefixIcon: const Icon(Icons.access_time),
       ),
       onTap: () async {
@@ -478,35 +441,14 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
         decoration: InputDecoration(
           labelText: label,
           labelStyle: const TextStyle(fontSize: 19),
-          border: const OutlineInputBorder(),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(16),
+            ),
+          ),
           prefixIcon: icon != null ? Icon(icon) : null,
         ),
       ),
     );
   }
-}
-
-// Dummy bottom navigation bar builder function
-Widget buildBottomNavigationBar(BuildContext context, int currentIndex) {
-  return BottomNavigationBar(
-    currentIndex: currentIndex,
-    selectedItemColor: Colors.green[700],
-    items: const [
-      BottomNavigationBarItem(
-        icon: Icon(Icons.home),
-        label: 'Home',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.directions_bus),
-        label: 'Request Bus',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.contact_mail),
-        label: 'Contact Us',
-      ),
-    ],
-    onTap: (index) {
-      // Handle navigation between pages
-    },
-  );
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kfupm_smart_bus_system/screens/track_bus.dart';
-import 'package:kfupm_smart_bus_system/screens/widget_main.dart';
+import 'package:kfupm_smart_bus_system/main_screen/main_scafold.dart';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
@@ -13,10 +12,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
   void initState() {
     super.initState();
     // Simulate a delay before navigating to the target screen
-    Future.delayed(Duration(seconds: 4), () {
+    Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => TrackBus()),
+        MaterialPageRoute(builder: (context) => const MainScaffold()),
       );
     });
   }

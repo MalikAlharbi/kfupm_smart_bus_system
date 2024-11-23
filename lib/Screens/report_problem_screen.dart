@@ -1,12 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
-import 'package:kfupm_smart_bus_system/screens/events_screen.dart';
-import 'package:kfupm_smart_bus_system/screens/request_bus.dart';
-import 'package:kfupm_smart_bus_system/screens/track_bus.dart';
 
 class ReportProblemScreen extends StatefulWidget {
   const ReportProblemScreen({super.key});
@@ -21,85 +16,157 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
       TextEditingController();
   bool isVisible = true;
   bool cameraVisible = false;
-  File? image;
+  File? image; // File to store the selected image
+  String? busNumberError;
+  String? problemDescriptionError;
 
-  int _currentIndex = 3; // Default index for the "Smart Buses" screen
-
-  void _onItemTapped(int index) {
-    // Check if the selected index is different from the current index
-    if (index != _currentIndex) {
-      setState(() {
-        _currentIndex = index;
-      });
-
-      // Navigate based on the selected index
-      switch (index) {
-        case 0:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const RequestBus()),
-          );
-          break;
-        case 1:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const EventsScreen()),
-          );
-          break;
-        case 2:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const TrackBus()),
-          );
-          break;
-        case 3:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const ReportProblemScreen()),
-          );
-          break;
-      }
-    }
-  }
+  // Variables to hold input data for backend
+  String? busNumber;
+  String? problemDescription;
+  File? imageFile; // Image file variable for backend
 
   Future pickImage() async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.camera);
-      if (image == null) return;
+      final pickedImage =
+          await ImagePicker().pickImage(source: ImageSource.camera);
+      if (pickedImage == null) return;
 
-      final imageTemporary = File(image.path);
+      final imageTemporary = File(pickedImage.path);
       setState(() {
-        this.image = imageTemporary;
+        image = imageTemporary;
+        imageFile = imageTemporary; // Assign image to the backend variable
       });
     } on PlatformException catch (m) {
       print('Failed to pick image: $m');
     }
   }
 
-  void changedState(bool isVisible) {
-    setState(() {
-      isVisible = isVisible;
-    });
+  void _validateAndSubmit() {
+  setState(() {
+    busNumberError = null;
+    problemDescriptionError = null;
+
+    // Validate Bus Number
+    if (_busNumberController.text.isEmpty) {
+      busNumberError = 'Please enter a bus number';
+    } else if (_busNumberController.text.length != 3) {
+      busNumberError = 'Bus number must be exactly 3 digits';
+    }
+
+    // Validate Problem Description
+    if (_problemDescriptionController.text.isEmpty) {
+      problemDescriptionError = 'Please explain the problem';
+    } else if (_problemDescriptionController.text.length > 200) {
+      problemDescriptionError = 'Problem description must be under 200 characters';
+    }
+
+    // If no errors, submit data
+    if (busNumberError == null && problemDescriptionError == null) {
+      busNumber = _busNumberController.text;
+      problemDescription = _problemDescriptionController.text;
+
+      // Clear the text fields
+      _busNumberController.clear();
+      _problemDescriptionController.clear();
+
+      // Clear the image
+      image = null;
+      imageFile = null;
+
+      // Reset the camera visibility
+      cameraVisible = false;
+
+      // Show success dialog
+      _showSuccessDialog(context);
+
+      // Log data for backend
+      print('Problem Type: $_selectedProblemType');
+      print('Bus Number: $busNumber');
+      print('Problem Description: $problemDescription');
+      print('Image File: ${imageFile?.path}'); // Log image path
+    }
+  });
+}
+
+  void _showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16), // Rounded corners
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(20), // Add some padding
+          decoration: BoxDecoration(
+            color: Colors.white, // Dialog background color
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Success Icon
+              Container(
+                decoration: BoxDecoration(
+                  color:
+                      Colors.green[100], // Light green background for the icon
+                  shape: BoxShape.circle,
+                ),
+                padding: const EdgeInsets.all(16),
+                child: Icon(
+                  Icons.check_circle,
+                  size: 72,
+                  color: Colors.green[700], // Darker green for the icon
+                ),
+              ),
+              const SizedBox(height: 16), // Add spacing
+              // Title
+              const Text(
+                'Report Sent',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87, // Dark text color
+                ),
+              ),
+              const SizedBox(height: 8),
+              // Subtitle
+              const Text(
+                'Your report has been submitted successfully.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black54, // Subtle text color
+                ),
+              ),
+              const SizedBox(height: 24),
+              // Action Button
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green[700],
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8), // Rounded button
+                  ),
+                ),
+                child: const Text(
+                  'OK',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Smart Buses',
-          style: TextStyle(color: Colors.white),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-        backgroundColor: Colors.green[700],
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-      bottomNavigationBar:
-          BottomBar(currentIndex: _currentIndex, onItemSelected: _onItemTapped),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(27.0),
         child: Column(
@@ -110,7 +177,11 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                 labelStyle: TextStyle(
                   fontSize: 19,
                 ),
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(16),
+                  ),
+                ),
                 prefixIcon: Icon(Icons.report_problem_outlined),
               ),
               value: _selectedProblemType,
@@ -118,7 +189,6 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                 setState(() {
                   _selectedProblemType = newValue!;
                   isVisible = newValue == "Technical Problem" ? false : true;
-                  changedState(isVisible);
                 });
               },
               items: <String>['Non-Technical Problem', 'Technical Problem']
@@ -129,37 +199,51 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                 );
               }).toList(),
             ),
-            Visibility(
-              visible: isVisible,
-              child: const SizedBox(height: 20),
-            ),
+            const SizedBox(height: 20),
             Visibility(
               visible: isVisible,
               child: TextField(
                 controller: _busNumberController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Bus Number',
-                  labelStyle: TextStyle(
+                  labelStyle: const TextStyle(
                     fontSize: 19,
                   ),
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.directions_bus),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(16),
+                    ),
+                  ),
+                  prefixIcon: const Icon(Icons.directions_bus),
+                  errorText: busNumberError,
                 ),
                 keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(3),
+                ],
               ),
             ),
             const SizedBox(height: 20),
             TextField(
               controller: _problemDescriptionController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Explain the problem',
-                labelStyle: TextStyle(
+                labelStyle: const TextStyle(
                   fontSize: 19,
                 ),
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.directions_bus),
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(16),
+                  ),
+                ),
+                prefixIcon: const Icon(Icons.description),
+                errorText: problemDescriptionError,
               ),
               maxLines: 3,
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(200),
+              ],
             ),
             const SizedBox(height: 16),
             Visibility(
@@ -168,11 +252,20 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                 padding: const EdgeInsets.only(
                     left: 20, right: 20, top: 16, bottom: 0),
                 child: image != null
-                    ? Image.file(
-                        image!,
-                        width: 160,
-                        height: 160,
-                        fit: BoxFit.cover,
+                    ? Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.green, width: 4),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.file(
+                            image!,
+                            width: 160,
+                            height: 160,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       )
                     : const SizedBox(
                         height: 0,
@@ -182,53 +275,40 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
             const SizedBox(height: 16),
             ElevatedButton.icon(
               icon: const Icon(
-                Icons.camera_alt,
-                color: Colors.white,
+                Icons.camera_alt_outlined,
+                color: Colors.black,
               ),
               label: const Text(
-                'Provide Screenshot',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                'Provide an Image',
+                style: TextStyle(color: Colors.black, fontSize: 16),
               ),
               onPressed: () {
-                // Implement screenshot functionality
                 pickImage();
-                cameraVisible = true;
+                setState(() {
+                  cameraVisible = true;
+                });
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green[700],
+                backgroundColor: const Color.fromARGB(255, 190, 190, 190),
                 padding:
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
               ),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('Report Sent'),
-                    content: Icon(
-                      Icons.check_circle_outline,
-                      color: Colors.green[700],
-                      size: 100,
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Close the dialog
-                        },
-                        child: const Text('OK'),
-                      ),
-                    ],
-                  ),
-                );
-              },
+              onPressed: _validateAndSubmit,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green[700],
                 padding:
                     const EdgeInsets.symmetric(vertical: 16, horizontal: 60),
                 textStyle: const TextStyle(
                   fontSize: 20,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
               ),
               icon: const Icon(
