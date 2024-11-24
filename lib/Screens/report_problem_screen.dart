@@ -65,6 +65,12 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
       busNumber = _busNumberController.text;
       problemDescription = _problemDescriptionController.text;
 
+      // Log data for backend
+      print('Problem Type: $_selectedProblemType');
+      print('Bus Number: $busNumber');
+      print('Problem Description: $problemDescription');
+      print('Image File: ${imageFile?.path}'); // Log image path
+      
       // Clear the text fields
       _busNumberController.clear();
       _problemDescriptionController.clear();
@@ -79,11 +85,7 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
       // Show success dialog
       _showSuccessDialog(context);
 
-      // Log data for backend
-      print('Problem Type: $_selectedProblemType');
-      print('Bus Number: $busNumber');
-      print('Problem Description: $problemDescription');
-      print('Image File: ${imageFile?.path}'); // Log image path
+      
     }
   });
 }
