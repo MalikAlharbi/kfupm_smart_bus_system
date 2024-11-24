@@ -19,7 +19,7 @@ class _TrackBusState extends State<TrackBus> {
   void initState() {
     super.initState();
     timer = Timer.periodic(
-        const Duration(seconds: 5), (Timer t) => _getBusesLocation());
+        const Duration(seconds: 1), (Timer t) => _getBusesLocation());
   }
 
   @override
