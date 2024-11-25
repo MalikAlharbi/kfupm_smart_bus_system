@@ -11,7 +11,6 @@ class RequestBusDetailsPage extends StatefulWidget {
   State<RequestBusDetailsPage> createState() => _RequestBusDetailsPageState();
 }
 
-
 class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
@@ -247,7 +246,10 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
                 onPressed: () {
                   validateAndSubmit(context);
                 },
-                icon: const Icon(Icons.send),
+                icon: const Icon(
+                  Icons.send,
+                  color: Colors.white,
+                ),
                 label: const Text('Submit Request',
                     style: TextStyle(fontSize: 20)),
                 style: ElevatedButton.styleFrom(
