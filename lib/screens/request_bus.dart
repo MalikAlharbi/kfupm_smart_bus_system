@@ -154,7 +154,10 @@ class _RequestBusState extends State<RequestBus> {
                     }
                   });
                 },
-                icon: const Icon(Icons.arrow_forward),
+                icon: const Icon(
+                  Icons.arrow_forward,
+                  color: Colors.white,
+                ),
                 label: const Text('Enter'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green[700],
