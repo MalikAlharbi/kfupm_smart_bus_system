@@ -3,11 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class RequestBusDetailsPage extends StatefulWidget {
-  const RequestBusDetailsPage({super.key});
+  final String selectedClub; // Add a field for the selected club
+
+  const RequestBusDetailsPage({super.key, required this.selectedClub});
 
   @override
   State<RequestBusDetailsPage> createState() => _RequestBusDetailsPageState();
 }
+
 
 class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
     with SingleTickerProviderStateMixin {
@@ -32,7 +35,8 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
       'destination': 'Photography Club Event',
       'numberOfBuses': '2',
       'assemblyLocation': 'Main Gate',
-      'reason': 'Club Meeting'
+      'reason': 'Club Meeting',
+      'clubName': 'Photography Club'
     },
     {
       'requestNumber': 'REQ002',
@@ -42,7 +46,8 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
       'destination': 'Robotics Competition',
       'numberOfBuses': '3',
       'assemblyLocation': 'Building 5',
-      'reason': 'Competition'
+      'reason': 'Competition',
+      'clubName': 'Robotics Club'
     },
     {
       'requestNumber': 'REQ003',
@@ -52,7 +57,8 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
       'destination': 'Art Exhibition',
       'numberOfBuses': '1',
       'assemblyLocation': 'Auditorium',
-      'reason': 'Art Display'
+      'reason': 'Art Display',
+      'clubName': 'Art Club'
     },
   ];
 
@@ -169,7 +175,8 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
                     'Destination: ${request['destination']}\n'
                     'Number of Buses: ${request['numberOfBuses']}\n'
                     'Assembly Location: ${request['assemblyLocation']}\n'
-                    'Reason: ${request['reason']}\n',
+                    'Reason: ${request['reason']}\n'
+                    'Club: ${request['clubName']}\n',
                   ),
                   actions: [
                     TextButton(
@@ -389,6 +396,7 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
                         'numberOfBuses': busesController.text,
                         'assemblyLocation': assemblyController.text,
                         'reason': reasonController.text,
+                        'clubName': widget.selectedClub,
                       });
                       requestCounter++;
                       dateController.text =

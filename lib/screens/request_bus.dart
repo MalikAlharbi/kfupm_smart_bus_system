@@ -64,7 +64,8 @@ class _RequestBusState extends State<RequestBus> {
                   onChanged: (value) {
                     setState(() {
                       selectedClub = value;
-                      clubSelectionError = null; // Clear error when a club is selected
+                      clubSelectionError =
+                          null; // Clear error when a club is selected
                       keyController.clear(); // Clear the pass key field
                     });
                   },
@@ -93,11 +94,6 @@ class _RequestBusState extends State<RequestBus> {
                 errorText: passKeyError,
                 prefixIcon: const Icon(Icons.vpn_key),
               ),
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(6),
-              ],
               obscureText: true,
             ),
             const SizedBox(height: 30),
@@ -128,18 +124,21 @@ class _RequestBusState extends State<RequestBus> {
                         Navigator.push(
                           context,
                           PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    const RequestBusDetailsPage(),
-                            transitionsBuilder:
-                                (context, animation, secondaryAnimation, child) {
+                            pageBuilder: (context, animation,
+                                    secondaryAnimation) =>
+                                RequestBusDetailsPage(
+                                    selectedClub:
+                                        selectedClub!), // Pass the selected club
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
                               const begin = Offset(1.0, 0.0);
                               const end = Offset.zero;
                               const curve = Curves.easeInOut;
 
                               var tween = Tween(begin: begin, end: end)
                                   .chain(CurveTween(curve: curve));
-                              var fadeTween = Tween<double>(begin: 0.0, end: 1.0);
+                              var fadeTween =
+                                  Tween<double>(begin: 0.0, end: 1.0);
 
                               return FadeTransition(
                                 opacity: animation.drive(fadeTween),
