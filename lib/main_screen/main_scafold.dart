@@ -93,7 +93,7 @@ class _MainScaffoldState extends State<MainScaffold> {
             icon: Icon(
               Icons.directions_bus,
             ),
-            label: 'Truck',
+            label: 'Track',
           ),
           BottomNavigationBarItem(
             icon: Icon(
