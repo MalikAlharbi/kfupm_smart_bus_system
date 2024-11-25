@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/widget_main.dart';
+import 'package:kfupm_smart_bus_system/screens/kfupm_student_app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -15,9 +15,7 @@ void main() async {
         primaryColor: const Color(0xFF179C3D),
         scaffoldBackgroundColor: Colors.grey[100],
       ),
-      home: const Scaffold(
-        body: Widgetmain(),
-      ),
+      home: const Scaffold(body: KfupmStudentApp()),
     ),
   );
 }

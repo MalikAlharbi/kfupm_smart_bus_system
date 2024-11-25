@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
-import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
 
 class SummaryPage extends StatefulWidget {
   const SummaryPage({super.key});
@@ -26,10 +24,6 @@ Widget _generateSummaryReport(BuildContext context) {
   return SafeArea(
     minimum: const EdgeInsets.all(5),
     child: Scaffold(
-      appBar: AppBar(
-        flexibleSpace: TopAppBar(),
-      ),
-      bottomNavigationBar: const BottomBar(),
       body: Column(
         children: [
           Expanded(

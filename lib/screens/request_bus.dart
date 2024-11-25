@@ -1,181 +1,170 @@
 import 'package:flutter/material.dart';
-import 'package:kfupm_smart_bus_system/Screens/request_history.dart';
-import 'package:kfupm_smart_bus_system/Widgets/text_field.dart';
-import 'package:kfupm_smart_bus_system/main_screen/bottom_bar.dart';
-import 'package:kfupm_smart_bus_system/main_screen/top_app_bar.dart';
-import 'package:kfupm_smart_bus_system/special_buttons/date_picker_button.dart';
-import 'package:uuid/uuid.dart';
-import 'dart:math';
+import 'package:flutter/services.dart';
+import 'package:kfupm_smart_bus_system/Screens/request_bus_details_screen.dart';
 
 class RequestBus extends StatefulWidget {
   const RequestBus({super.key});
 
   @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return _RequestBusState();
-  }
+  State<RequestBus> createState() => _RequestBusState();
 }
 
 class _RequestBusState extends State<RequestBus> {
-  int randomNumber = Random().nextInt(200);
+  final TextEditingController keyController = TextEditingController();
+  String? selectedClub;
+  String? passKeyError;
+  String? clubSelectionError; // Error for the dropdown
+
+  // Dynamic map for clubs and their keys
+  final Map<String, String> clubsWithKeys = {
+    'Photography Club': '123456',
+    'Robotics Club': '654321',
+    'Art Club': '111111',
+    'Computer Club': '222222',
+    'IET Club': '333333',
+    'IE Club': '444444',
+    'UAS2030 Club': '555555',
+    'Electrical Club': '666666',
+    'Toastmasters Club': '777777',
+  };
+
   @override
-  Widget build(context) {
-    return SafeArea(
-      minimum: const EdgeInsets.all(5),
-      child: Scaffold(
-        appBar: AppBar(
-          flexibleSpace: TopAppBar(),
-        ),
-        bottomNavigationBar: BottomBar(),
-        body: Column(
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // First child: Column with 3 sub-children
+            // Dropdown for selecting club
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // image of KFUPM Buses
-                const SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.green),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: const Image(
-                      image: AssetImage("assets/images/Bus.jpg"),
-                      width: 221,
-                    ),
-                  ),
-                ),
-
-                const SizedBox(
-                  height: 8,
-                ),
-
-                // a button that allows the user to enter a specific date and store the date recieved
-                Container(child: DatePickerButton()),
-                const SizedBox(
-                  height: 8,
-                ),
-
-                // a unique number generated that represent request number
-                // NEED UPDATE
-                Container(
-                    child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Request Number: #",
-                      style: TextStyle(
-                        fontSize: 25,
+                DropdownButtonFormField<String>(
+                  value: selectedClub,
+                  decoration: const InputDecoration(
+                    labelText: 'Select Club',
+                    labelStyle: TextStyle(fontSize: 19),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(16),
                       ),
                     ),
-                    Text(
-                      randomNumber.toString(),
-                      style: const TextStyle(
-                          fontSize: 25, fontStyle: FontStyle.italic),
+                    prefixIcon: Icon(Icons.group),
+                  ),
+                  items: clubsWithKeys.keys.map((club) {
+                    return DropdownMenuItem(
+                      value: club,
+                      child: Text(
+                        club,
+                        style: const TextStyle(fontSize: 19),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedClub = value;
+                      clubSelectionError =
+                          null; // Clear error when a club is selected
+                      keyController.clear(); // Clear the pass key field
+                    });
+                  },
+                ),
+                if (clubSelectionError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      clubSelectionError!,
+                      style: const TextStyle(color: Colors.red, fontSize: 14),
                     ),
-                  ],
-                )),
-                const SizedBox(
-                  height: 10,
-                )
+                  ),
               ],
             ),
-            // Second child: Column with 5 sub-children
-            const Column(
-              children: [
-                TextFieldBus(
-                  title: 'KFUPM ID:',
+            const SizedBox(height: 20),
+
+            // TextField for entering pass key
+            TextField(
+              controller: keyController,
+              decoration: InputDecoration(
+                labelText: 'Enter Key',
+                labelStyle: const TextStyle(fontSize: 19),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                TextFieldBus(
-                  title: 'Purpose:',
-                ),
-                TextFieldBus(
-                  title: 'Destination:',
-                ),
-                TextFieldBus(
-                  title: 'Time: ',
-                ),
-              ],
+                errorText: passKeyError,
+                prefixIcon: const Icon(Icons.vpn_key),
+              ),
+              obscureText: true,
             ),
-            // Third child: Row with 2 sub-children
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                const Spacer(),
-                SizedBox(
-                    width: 130,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF179C3D)),
-                        onPressed: () {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (ctx) => const RequestHistoryScreen(),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          decoration: const BoxDecoration(),
-                          child: const Padding(
-                            padding: EdgeInsets.all(5.0),
-                            child: Column(
-                              children: [
-                                Text(
-                                  "View",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold),
+            const SizedBox(height: 30),
+
+            // Submit button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  setState(() {
+                    // Reset errors
+                    clubSelectionError = null;
+                    passKeyError = null;
+
+                    // Validate the club selection
+                    if (selectedClub == null) {
+                      clubSelectionError = 'Please select a club';
+                    } else {
+                      final enteredKey = keyController.text;
+                      final expectedKey = clubsWithKeys[selectedClub!];
+
+                      // Validate the pass key
+                      if (enteredKey != expectedKey) {
+                        passKeyError = 'Wrong pass key, please retry';
+                      } else {
+                        // Clear errors and navigate to the next page
+                        passKeyError = null;
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation,
+                                    secondaryAnimation) =>
+                                RequestBusDetailsPage(
+                                    selectedClub:
+                                        selectedClub!), // Pass the selected club
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              const begin = Offset(1.0, 0.0);
+                              const end = Offset.zero;
+                              const curve = Curves.easeInOut;
+
+                              var tween = Tween(begin: begin, end: end)
+                                  .chain(CurveTween(curve: curve));
+                              var fadeTween =
+                                  Tween<double>(begin: 0.0, end: 1.0);
+
+                              return FadeTransition(
+                                opacity: animation.drive(fadeTween),
+                                child: SlideTransition(
+                                  position: animation.drive(tween),
+                                  child: child,
                                 ),
-                                Text(
-                                  "Request",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            ),
+                              );
+                            },
                           ),
-                        ))),
-                const Spacer(),
-                SizedBox(
-                    width: 130,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF179C3D)),
-                      onPressed: () {},
-                      child: const Padding(
-                        padding: EdgeInsets.all(5.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              "Submit",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              "Request",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                    )),
-                const Spacer(),
-              ],
+                        );
+                      }
+                    }
+                  });
+                },
+                icon: const Icon(Icons.arrow_forward),
+                label: const Text('Enter'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green[700],
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+              ),
             ),
           ],
         ),

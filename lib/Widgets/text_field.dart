@@ -32,17 +32,9 @@ class _TextFieldBusState extends State<TextFieldBus> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            widget.title,
-            style: const TextStyle(
-              fontSize: 20,
-              color: Color(0xFF179C3D),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8), // Added spacing between Text and TextField
+          const SizedBox(height: 30), // Added spacing between Text and TextField
           Container(
-            height: 30, // Increased height for better visibility
+            height: 40, // Increased height for better visibility
             color: Colors.white,
 
             child: TextField(
@@ -50,10 +42,31 @@ class _TextFieldBusState extends State<TextFieldBus> {
                 fontSize: 16,
               ),
               cursorHeight: 20,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: widget.title,
+                labelStyle: const TextStyle(
+                  color: Colors.green,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold
+                ),
+                floatingLabelBehavior: FloatingLabelBehavior.always,
                 contentPadding:
-                    EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                border: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green, width: 2),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  gapPadding: 8,
+                ),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green, width: 2),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  gapPadding: 8,
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green, width: 2),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  gapPadding: 8,
+                ),
               ),
               onChanged: (value) {
                 setState(() {
