@@ -82,7 +82,9 @@ class _TrackBusState extends State<TrackBus> {
     return Scaffold(
       body: isLoading
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                color: Color(0xFF179C3D),
+              ),
             )
           : GoogleMap(
               onMapCreated: _onMapCreated,
