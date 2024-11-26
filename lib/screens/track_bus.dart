@@ -13,11 +13,22 @@ class TrackBus extends StatefulWidget {
 class _TrackBusState extends State<TrackBus> {
   //timer
   Timer? timer;
+  // Loading state
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(
-        const Duration(seconds: 1), (Timer t) => _getBusesLocation());
+    _getBusesLocation().then((_) {
+      setState(() {
+        isLoading = false;
+      });
+      // Start the periodic timer after loading the initial data
+      timer = Timer.periodic(
+        const Duration(seconds: 1),
+        (Timer t) => _getBusesLocation(),
+      );
+    });
   }
 
   @override
@@ -69,20 +80,24 @@ class _TrackBusState extends State<TrackBus> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GoogleMap(
-        onMapCreated: _onMapCreated,
-        initialCameraPosition: CameraPosition(
-          target: kfupmCenter,
-          zoom: 15.0,
-        ),
-        minMaxZoomPreference: const MinMaxZoomPreference(15.0, 21.0),
-        cameraTargetBounds: CameraTargetBounds(kfupmBounds),
-        //Restrict to 2D movment only
-        compassEnabled: false,
-        tiltGesturesEnabled: false,
-        rotateGesturesEnabled: false,
-        markers: Set.from(_markers),
-      ),
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : GoogleMap(
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: kfupmCenter,
+                zoom: 15.0,
+              ),
+              minMaxZoomPreference: const MinMaxZoomPreference(15.0, 21.0),
+              cameraTargetBounds: CameraTargetBounds(kfupmBounds),
+              // Restrict to 2D movement only
+              compassEnabled: false,
+              tiltGesturesEnabled: false,
+              rotateGesturesEnabled: false,
+              markers: Set.from(_markers),
+            ),
     );
   }
 }
