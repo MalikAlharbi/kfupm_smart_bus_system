@@ -26,7 +26,7 @@ class _TrackBusState extends State<TrackBus> {
     super.dispose();
   }
 
-  //google maps and LatLng values
+  // Google Maps and LatLng values
   late GoogleMapController mapController;
   final LatLngBounds kfupmBounds = LatLngBounds(
     southwest: const LatLng(26.302883027647383, 50.134502224126315),
@@ -35,23 +35,28 @@ class _TrackBusState extends State<TrackBus> {
   final LatLng kfupmCenter =
       const LatLng(26.307048543732158, 50.145802165049304);
 
-  // buses location
+  // Buses location
   final List<Marker> _markers = [];
   Future<void> _getBusesLocation() async {
+    if (!mounted) return; // Exit if the widget is not mounted
     List busesLocation = await getAssetsLatestPositions();
     BitmapDescriptor busIcon = await BitmapDescriptor.asset(
-        const ImageConfiguration(size: Size(24, 24)),
-        'assets/images/bus_icon.png');
-    setState(() {
-      _markers.clear();
-      for (var bus in busesLocation) {
-        _markers.add(Marker(
-          markerId: MarkerId(bus['assetId'].toString()),
-          position: LatLng(bus['locationLog'][0], bus['locationLog'][1]),
-          icon: busIcon,
-        ));
-      }
-    });
+      const ImageConfiguration(size: Size(24, 24)),
+      'assets/images/bus_icon.png',
+    );
+
+    if (mounted) {
+      setState(() {
+        _markers.clear();
+        for (var bus in busesLocation) {
+          _markers.add(Marker(
+            markerId: MarkerId(bus['assetId'].toString()),
+            position: LatLng(bus['locationLog'][0], bus['locationLog'][1]),
+            icon: busIcon,
+          ));
+        }
+      });
+    }
   }
 
   void _onMapCreated(GoogleMapController controller) {
