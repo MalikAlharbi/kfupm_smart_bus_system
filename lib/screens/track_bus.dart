@@ -57,6 +57,8 @@ class _TrackBusState extends State<TrackBus> {
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     _getBusesLocation();
+    // Ensure the map centers on the correct location after creation
+    mapController.moveCamera(CameraUpdate.newLatLng(kfupmCenter));
   }
 
   @override
