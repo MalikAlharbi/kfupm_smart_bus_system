@@ -24,6 +24,7 @@ class _TrackBusState extends State<TrackBus> {
         isLoading = false;
       });
       // Start the periodic timer after loading the initial data
+      timer?.cancel(); //cancel perv timers if any
       timer = Timer.periodic(
         const Duration(seconds: 5),
         (Timer t) => _getBusesLocation(),
