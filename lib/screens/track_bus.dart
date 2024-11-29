@@ -16,19 +16,29 @@ class _TrackBusState extends State<TrackBus> {
   // Loading state
   bool isLoading = true;
 
+  BitmapDescriptor? busIcon;
+  Future<void> getBusIcon() async {
+    busIcon = await BitmapDescriptor.asset(
+      const ImageConfiguration(size: Size(24, 24)),
+      'assets/images/bus_icon.png',
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-    _getBusesLocation().then((_) {
-      setState(() {
-        isLoading = false;
+    getBusIcon().then((_) {
+      _getBusesLocation().then((_) {
+        setState(() {
+          isLoading = false;
+        });
+        // Start the periodic timer after loading the initial data
+        timer?.cancel(); // Cancel previous timers if any
+        timer = Timer.periodic(
+          const Duration(seconds: 5),
+          (Timer t) => _getBusesLocation(),
+        );
       });
-      // Start the periodic timer after loading the initial data
-      timer?.cancel(); //cancel perv timers if any
-      timer = Timer.periodic(
-        const Duration(seconds: 5),
-        (Timer t) => _getBusesLocation(),
-      );
     });
   }
 
@@ -49,13 +59,11 @@ class _TrackBusState extends State<TrackBus> {
 
   // Buses location
   final List<Marker> _markers = [];
+
   Future<void> _getBusesLocation() async {
-    if (!mounted) return; // Exit if the widget is not mounted
+    if (!mounted || busIcon == null)
+      return; // Exit if the widget is not mounted
     List busesLocation = await getAssetsLatestPositions();
-    BitmapDescriptor busIcon = await BitmapDescriptor.asset(
-      const ImageConfiguration(size: Size(24, 24)),
-      'assets/images/bus_icon.png',
-    );
 
     if (mounted) {
       setState(() {
@@ -64,7 +72,7 @@ class _TrackBusState extends State<TrackBus> {
           _markers.add(Marker(
             markerId: MarkerId(bus['assetId'].toString()),
             position: LatLng(bus['locationLog'][0], bus['locationLog'][1]),
-            icon: busIcon,
+            icon: busIcon!,
           ));
         }
       });
@@ -99,7 +107,7 @@ class _TrackBusState extends State<TrackBus> {
               compassEnabled: false,
               tiltGesturesEnabled: false,
               rotateGesturesEnabled: false,
-              markers: Set.from(_markers),
+              markers: _markers.toSet(),
             ),
     );
   }
