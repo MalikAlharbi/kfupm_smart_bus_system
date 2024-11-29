@@ -25,7 +25,7 @@ class _TrackBusState extends State<TrackBus> {
       });
       // Start the periodic timer after loading the initial data
       timer = Timer.periodic(
-        const Duration(seconds: 1),
+        const Duration(seconds: 5),
         (Timer t) => _getBusesLocation(),
       );
     });
