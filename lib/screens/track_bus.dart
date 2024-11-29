@@ -11,12 +11,12 @@ class TrackBus extends StatefulWidget {
 }
 
 class _TrackBusState extends State<TrackBus> {
-  //timer
   Timer? timer;
-  // Loading state
   bool isLoading = true;
 
   BitmapDescriptor? busIcon;
+  Map<String, Marker> _markers = {}; // Using a Map instead of List
+
   Future<void> getBusIcon() async {
     busIcon = await BitmapDescriptor.asset(
       const ImageConfiguration(size: Size(24, 24)),
@@ -33,7 +33,7 @@ class _TrackBusState extends State<TrackBus> {
           isLoading = false;
         });
         // Start the periodic timer after loading the initial data
-        timer?.cancel(); // Cancel previous timers if any
+        timer?.cancel();
         timer = Timer.periodic(
           const Duration(seconds: 5),
           (Timer t) => _getBusesLocation(),
@@ -48,7 +48,6 @@ class _TrackBusState extends State<TrackBus> {
     super.dispose();
   }
 
-  // Google Maps and LatLng values
   late GoogleMapController mapController;
   final LatLngBounds kfupmBounds = LatLngBounds(
     southwest: const LatLng(26.302883027647383, 50.134502224126315),
@@ -57,24 +56,30 @@ class _TrackBusState extends State<TrackBus> {
   final LatLng kfupmCenter =
       const LatLng(26.307048543732158, 50.145802165049304);
 
-  // Buses location
-  final List<Marker> _markers = [];
-
   Future<void> _getBusesLocation() async {
-    if (!mounted || busIcon == null)
-      return; // Exit if the widget is not mounted
-    List busesLocation = await getAssetsLatestPositions();
+    if (!mounted || busIcon == null) return;
 
+    List busesLocation = await getAssetsLatestPositions();
     if (mounted) {
+      // Collect all marker updates
+      final Map<String, Marker> updatedMarkers = {};
+      for (var bus in busesLocation) {
+        String busId = bus['assetId'].toString();
+        LatLng newPosition =
+            LatLng(bus['locationLog'][0], bus['locationLog'][1]);
+
+        // Update or add marker to the local map
+        updatedMarkers[busId] = _markers.containsKey(busId)
+            ? _markers[busId]!.copyWith(positionParam: newPosition)
+            : Marker(
+                markerId: MarkerId(busId),
+                position: newPosition,
+                icon: busIcon!);
+      }
+
+      // Update markers once
       setState(() {
-        _markers.clear();
-        for (var bus in busesLocation) {
-          _markers.add(Marker(
-            markerId: MarkerId(bus['assetId'].toString()),
-            position: LatLng(bus['locationLog'][0], bus['locationLog'][1]),
-            icon: busIcon!,
-          ));
-        }
+        _markers = updatedMarkers;
       });
     }
   }
@@ -82,7 +87,6 @@ class _TrackBusState extends State<TrackBus> {
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     _getBusesLocation();
-    // Ensure the map centers on the correct location after creation
     mapController.moveCamera(CameraUpdate.newLatLng(kfupmCenter));
   }
 
@@ -103,11 +107,10 @@ class _TrackBusState extends State<TrackBus> {
               ),
               minMaxZoomPreference: const MinMaxZoomPreference(15.0, 21.0),
               cameraTargetBounds: CameraTargetBounds(kfupmBounds),
-              // Restrict to 2D movement only
               compassEnabled: false,
               tiltGesturesEnabled: false,
               rotateGesturesEnabled: false,
-              markers: _markers.toSet(),
+              markers: _markers.values.toSet(), // Convert map values to a Set
             ),
     );
   }
