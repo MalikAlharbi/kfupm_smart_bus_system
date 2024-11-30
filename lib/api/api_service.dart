@@ -101,16 +101,19 @@ Future<List<dynamic>> _fetchBusLocations() async {
     List<dynamic> dataReply = responseBody['data']['reply'];
     List<dynamic> busesLocation = [];
     for (var bus in dataReply) {
-      var assetId = bus['locationLog']['assetId'];
-      var locationLog = [
-        bus['locationLog']['latitude'] ?? 0.0,
-        bus['locationLog']['longitude'] ?? 0.0
-      ];
-      Map<String, dynamic> busInfo = {
-        'assetId': assetId,
-        'locationLog': locationLog
-      };
-      busesLocation.add(busInfo);
+      if (bus['assetInfo']['hasCommunicatedInLast3Hours'] &&
+          bus['locationLog']['ignitionStatus'] == 1) {
+        var assetId = bus['locationLog']['assetId'];
+        var locationLog = [
+          bus['locationLog']['latitude'] ?? 0.0,
+          bus['locationLog']['longitude'] ?? 0.0
+        ];
+        Map<String, dynamic> busInfo = {
+          'assetId': assetId,
+          'locationLog': locationLog
+        };
+        busesLocation.add(busInfo);
+      }
     }
     return busesLocation;
   } else if (response.statusCode == 403) {
