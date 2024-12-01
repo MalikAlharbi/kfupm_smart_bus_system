@@ -74,7 +74,15 @@ final busIds = [
 String? apiToken;
 bool tokenFound = false;
 
-Future<List> getAssetsLatestPositions() async {
+Stream<List<dynamic>> getAssetsLatestPositionsStream() {
+  return Stream.periodic(
+          const Duration(seconds: 5), (_) => _fetchBusLocations())
+      .asyncExpand((futureList) async* {
+    yield await futureList;
+  });
+}
+
+Future<List<dynamic>> _fetchBusLocations() async {
   if (!tokenFound) apiToken = await getAccessTokenFromFirebase();
   final url = Uri.parse(
       'https://api.eagle-iot.com/v2/Tracking/GetAssetsLatestPositions');
@@ -91,21 +99,27 @@ Future<List> getAssetsLatestPositions() async {
     tokenFound = true;
     final Map<String, dynamic> responseBody = jsonDecode(response.body);
     List<dynamic> dataReply = responseBody['data']['reply'];
-    List<Object> busesLocation = [];
+    List<dynamic> busesLocation = [];
     for (var bus in dataReply) {
-      var assetId = bus['locationLog']['assetId'];
-      var locationLog = [
-        bus['locationLog']['latitude'] ?? 0.0,
-        bus['locationLog']['longitude'] ?? 0.0
-      ];
-      Object busInfo = {'assetId': assetId, 'locationLog': locationLog};
-      busesLocation.add(busInfo);
+      if (bus['assetInfo']['hasCommunicatedInLast3Hours'] &&
+          bus['locationLog']['ignitionStatus'] == 1) {
+        var assetId = bus['locationLog']['assetId'];
+        var locationLog = [
+          bus['locationLog']['latitude'] ?? 0.0,
+          bus['locationLog']['longitude'] ?? 0.0
+        ];
+        Map<String, dynamic> busInfo = {
+          'assetId': assetId,
+          'locationLog': locationLog
+        };
+        busesLocation.add(busInfo);
+      }
     }
     return busesLocation;
   } else if (response.statusCode == 403) {
     tokenFound = false;
     await getAccessToken();
-    return getAssetsLatestPositions();
+    return _fetchBusLocations();
   }
   return [];
 }
