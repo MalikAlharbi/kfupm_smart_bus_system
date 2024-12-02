@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -7,6 +8,7 @@ import 'package:kfupm_smart_bus_system/api/api_service.dart';
 import 'package:kfupm_smart_bus_system/data/station_data.dart'; // Import the stations data
 import 'dart:convert'; // For JSON parsing
 import 'package:flutter/services.dart'; // For loading assets
+import 'dart:io'; // For checking platform (iOS or Android)
 
 class TrackBus extends StatefulWidget {
   const TrackBus({super.key});
@@ -133,30 +135,58 @@ class _TrackBusState extends State<TrackBus> {
         buildingString += building + ', ';
       }
     }
-    // Placeholder functionality
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(stationName),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Buildings: $buildingString'),
+
+    // Check if platform is iOS
+    if (Platform.isIOS) {
+      showDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: Text(stationName),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Buildings: $buildingString'),
+            ],
+          ),
+          actions: [
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.pop(context);
+                mapController.hideMarkerInfoWindow(
+                  MarkerId(position.toString()),
+                );
+              },
+              child: const Text('OK', style: TextStyle(color: Colors.black)),
+            ),
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              mapController.hideMarkerInfoWindow(
-                MarkerId(position.toString()),
-              );
-            },
-            child: const Text('OK'),
+      );
+    } else {
+      // Show Material Dialog for other platforms (Android)
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(stationName),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Buildings: $buildingString'),
+            ],
           ),
-        ],
-      ),
-    );
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                mapController.hideMarkerInfoWindow(
+                  MarkerId(position.toString()),
+                );
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   void _addStationMarkers() {
