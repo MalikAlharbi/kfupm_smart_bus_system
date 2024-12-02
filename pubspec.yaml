@@ -77,6 +77,9 @@ flutter:
     - .env
     - assets/images/Bus.jpg
     - assets/images/loadingPage.gif
+    - assets/custom_map.json
+    - assets/images/male_station.png
+    - assets/images/female_station.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

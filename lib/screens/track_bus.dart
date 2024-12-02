@@ -4,6 +4,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:async';
 import 'package:kfupm_smart_bus_system/api/api_service.dart';
+import 'package:kfupm_smart_bus_system/data/station_data.dart'; // Import the stations data
+import 'dart:convert'; // For JSON parsing
+import 'package:flutter/services.dart'; // For loading assets
 
 class TrackBus extends StatefulWidget {
   const TrackBus({super.key});
@@ -27,11 +30,29 @@ class _TrackBusState extends State<TrackBus> {
   final LatLng kfupmCenter =
       const LatLng(26.307048543732158, 50.145802165049304);
 
-  Future<void> getBusIcon() async {
+  // Station Icons
+  late BitmapDescriptor maleStationIcon;
+  late BitmapDescriptor femaleStationIcon;
+
+  // Map style string
+  String? mapStyle;
+
+  Future<void> _loadIcons() async {
+    mapStyle = await rootBundle.loadString('assets/custom_map.json');
+    maleStationIcon = await BitmapDescriptor.asset(
+      const ImageConfiguration(size: Size(27, 27)),
+      'assets/images/male_station.png',
+    );
+    femaleStationIcon = await BitmapDescriptor.asset(
+      const ImageConfiguration(size: Size(27, 27)),
+      'assets/images/female_station.png',
+    );
+
     busIcon = await BitmapDescriptor.asset(
       const ImageConfiguration(size: Size(24, 24)),
       'assets/images/bus_icon.png',
     );
+    _addStationMarkers();
   }
 
   Future<void> _getUserLocation() async {
@@ -49,7 +70,7 @@ class _TrackBusState extends State<TrackBus> {
   @override
   void initState() {
     super.initState();
-    getBusIcon().then((_) {
+    _loadIcons().then((_) {
       _getUserLocation().then((_) {
         _startBusLocationUpdates();
       });
@@ -88,6 +109,7 @@ class _TrackBusState extends State<TrackBus> {
       setState(() {
         _markers = updatedMarkers;
         isLoading = false;
+        _addStationMarkers();
       });
     });
   }
@@ -96,6 +118,64 @@ class _TrackBusState extends State<TrackBus> {
   void dispose() {
     _streamSubscription?.cancel();
     super.dispose();
+  }
+
+  void _onStationTapped(
+    String stationName,
+    LatLng position,
+    List<String> buildings,
+  ) {
+    String buildingString = '';
+    for (var building in buildings) {
+      if (buildings.indexOf(building) == buildings.length - 1) {
+        buildingString += building + '.';
+      } else {
+        buildingString += building + ', ';
+      }
+    }
+    // Placeholder functionality
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(stationName),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Buildings: $buildingString'),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              mapController.hideMarkerInfoWindow(
+                MarkerId(position.toString()),
+              );
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _addStationMarkers() {
+    for (var station in stationLocations) {
+      _markers['${station['position']}'] = Marker(
+        markerId: MarkerId('${station['position']}'),
+        position: station['position'],
+        icon: station['type'] == 'male' ? maleStationIcon : femaleStationIcon,
+        infoWindow: InfoWindow(
+          title: station['name'],
+          snippet: 'Tap for details',
+          onTap: () => _onStationTapped(
+            station['name'],
+            station['position'],
+            station['buildings'],
+          ),
+        ),
+      );
+    }
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -118,6 +198,7 @@ class _TrackBusState extends State<TrackBus> {
                 target: kfupmCenter,
                 zoom: 15.0,
               ),
+              style: mapStyle,
               minMaxZoomPreference: const MinMaxZoomPreference(15.0, 21.0),
               cameraTargetBounds: CameraTargetBounds(kfupmBounds),
               compassEnabled: false,
