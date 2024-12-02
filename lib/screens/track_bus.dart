@@ -156,7 +156,10 @@ class _TrackBusState extends State<TrackBus> {
                   MarkerId(position.toString()),
                 );
               },
-              child: const Text('OK', style: TextStyle(color: Colors.black)),
+              child: const Text(
+                'OK',
+                style: TextStyle(color: CupertinoColors.activeBlue),
+              ),
             ),
           ],
         ),
