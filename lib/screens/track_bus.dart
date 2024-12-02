@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kfupm_smart_bus_system/api/api_service.dart';
+import 'package:kfupm_smart_bus_system/data/station_data.dart'; // Import the stations data
 import 'dart:async';
 import 'dart:convert'; // For JSON parsing
 import 'package:flutter/services.dart'; // For loading assets
@@ -33,13 +34,6 @@ class _TrackBusState extends State<TrackBus> {
   // Station Icons
   late BitmapDescriptor maleStationIcon;
   late BitmapDescriptor femaleStationIcon;
-
-  // Station locations
-  final List<Map<String, dynamic>> stationLocations = [
-    {'position': const LatLng(26.312737, 50.142070), 'type': 'male'},
-    {'position': const LatLng(26.306394, 50.146313), 'type': 'female'},
-    // Add more stations as needed
-  ];
 
   // Map style string
   String? mapStyle;
@@ -74,27 +68,49 @@ class _TrackBusState extends State<TrackBus> {
 
   Future<void> _loadIcons() async {
     maleStationIcon = await BitmapDescriptor.asset(
-      const ImageConfiguration(size: Size(30 , 30)),
+      const ImageConfiguration(size: Size(27, 27)),
       'assets/images/male_station.png',
     );
     femaleStationIcon = await BitmapDescriptor.asset(
-      const ImageConfiguration(size: Size(30, 30)),
+      const ImageConfiguration(size: Size(27, 27)),
       'assets/images/female_station.png',
     );
 
     _addStationMarkers();
   }
 
-  void _onStationTapped(String stationType, LatLng position) {
+  void _onStationTapped(
+    String stationName,
+    LatLng position,
+    List<String> buildings,
+  ) {
+    String buildingString = '';
+    for (var building in buildings) {
+      if (buildings.indexOf(building) == buildings.length - 1) {
+        buildingString += building + '.';
+      } else {
+        buildingString += building + ', ';
+      }
+    }
     // Placeholder functionality
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Station Selected'),
-        content: Text('You clicked on a $stationType station at $position.'),
+        title: Text(stationName),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Buildings: $buildingString'),
+          ],
+        ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+              mapController.hideMarkerInfoWindow(
+                MarkerId(position.toString()),
+              );
+            },
             child: const Text('OK'),
           ),
         ],
@@ -106,16 +122,17 @@ class _TrackBusState extends State<TrackBus> {
     for (var station in stationLocations) {
       _markers.add(
         Marker(
-          markerId: MarkerId('${station['type']}'),
+          markerId: MarkerId('${station['position']}'),
           position: station['position'],
           icon: station['type'] == 'male' ? maleStationIcon : femaleStationIcon,
           infoWindow: InfoWindow(
-            title: station['type'] == 'male' ? 'Male Station' : 'Female Station',
+            title: station['name'],
             snippet: 'Tap for details',
-          ),
-          onTap: () => _onStationTapped(
-            station['type'] == 'male' ? 'Male' : 'Female',
-            station['position'],
+            onTap: () => _onStationTapped(
+              station['name'],
+              station['position'],
+              station['buildings'],
+            ),
           ),
         ),
       );
