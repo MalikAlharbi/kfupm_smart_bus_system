@@ -36,8 +36,8 @@ class _TrackBusState extends State<TrackBus> {
 
   // Station locations
   final List<Map<String, dynamic>> stationLocations = [
-    {'position': LatLng(26.309048, 50.141902), 'type': 'male'},
-    {'position': LatLng(26.310148, 50.145802), 'type': 'female'},
+    {'position': const LatLng(26.312737, 50.142070), 'type': 'male'},
+    {'position': const LatLng(26.306394, 50.146313), 'type': 'female'},
     // Add more stations as needed
   ];
 
@@ -74,12 +74,12 @@ class _TrackBusState extends State<TrackBus> {
 
   Future<void> _loadIcons() async {
     maleStationIcon = await BitmapDescriptor.asset(
-      const ImageConfiguration(size: Size(48, 48)),
-      'assets/icons/male_station.png',
+      const ImageConfiguration(size: Size(30 , 30)),
+      'assets/images/male_station.png',
     );
     femaleStationIcon = await BitmapDescriptor.asset(
-      const ImageConfiguration(size: Size(48, 48)),
-      'assets/icons/female_station.png',
+      const ImageConfiguration(size: Size(30, 30)),
+      'assets/images/female_station.png',
     );
 
     _addStationMarkers();
@@ -106,7 +106,7 @@ class _TrackBusState extends State<TrackBus> {
     for (var station in stationLocations) {
       _markers.add(
         Marker(
-          markerId: MarkerId('${station['position']}'),
+          markerId: MarkerId('${station['type']}'),
           position: station['position'],
           icon: station['type'] == 'male' ? maleStationIcon : femaleStationIcon,
           infoWindow: InfoWindow(
@@ -141,7 +141,8 @@ class _TrackBusState extends State<TrackBus> {
               icon: busIcon,
             ));
           }
-          //_addStationMarkers(); // Re-add station markers after clearing
+          _addStationMarkers();
+          // Re-add station markers after clearing
         });
       }
     } catch (e) {
