@@ -79,6 +79,9 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
       print('Problem Description: $problemDescription');
       print('Image File: ${imageFile?.path}'); // Log image path
       
+      // Call the function to submit the report
+      submitReport();
+
       // Clear the text fields
       _busNumberController.clear();
       _problemDescriptionController.clear();
@@ -90,6 +93,7 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
       // Reset the camera visibility
       cameraVisible = false;
 
+      
       // Show success dialog
       _showSuccessDialog(context);
 
