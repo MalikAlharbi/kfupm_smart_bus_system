@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:kfupm_smart_bus_system/api/api_service.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'dart:async';
+import 'package:kfupm_smart_bus_system/api/api_service.dart';
 
 class TrackBus extends StatefulWidget {
   const TrackBus({super.key});
@@ -13,9 +15,17 @@ class TrackBus extends StatefulWidget {
 class _TrackBusState extends State<TrackBus> {
   StreamSubscription? _streamSubscription;
   bool isLoading = true;
-
+  bool isUserInBounds = true;
   BitmapDescriptor? busIcon;
   Map<String, Marker> _markers = {};
+
+  late GoogleMapController mapController;
+  final LatLngBounds kfupmBounds = LatLngBounds(
+    southwest: const LatLng(26.302883027647383, 50.134502224126315),
+    northeast: const LatLng(26.314681, 50.156939),
+  );
+  final LatLng kfupmCenter =
+      const LatLng(26.307048543732158, 50.145802165049304);
 
   Future<void> getBusIcon() async {
     busIcon = await BitmapDescriptor.asset(
@@ -24,11 +34,25 @@ class _TrackBusState extends State<TrackBus> {
     );
   }
 
+  Future<void> _getUserLocation() async {
+    final permissionStatus = await Permission.location.request();
+    if (permissionStatus.isGranted) {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.medium);
+      LatLng userPosition = LatLng(position.latitude, position.longitude);
+      setState(() {
+        isUserInBounds = kfupmBounds.contains(userPosition);
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getBusIcon().then((_) {
-      _startBusLocationUpdates();
+      _getUserLocation().then((_) {
+        _startBusLocationUpdates();
+      });
     });
   }
 
@@ -43,12 +67,22 @@ class _TrackBusState extends State<TrackBus> {
         LatLng newPosition =
             LatLng(bus['locationLog'][0], bus['locationLog'][1]);
 
-        updatedMarkers[busId] = _markers.containsKey(busId)
-            ? _markers[busId]!.copyWith(positionParam: newPosition)
-            : Marker(
-                markerId: MarkerId(busId),
-                position: newPosition,
-                icon: busIcon!);
+        if (_markers.containsKey(busId)) {
+          LatLng existingPosition = _markers[busId]!.position;
+          if (existingPosition.latitude != newPosition.latitude ||
+              existingPosition.longitude != newPosition.longitude) {
+            updatedMarkers[busId] =
+                _markers[busId]!.copyWith(positionParam: newPosition);
+          } else {
+            updatedMarkers[busId] = _markers[busId]!;
+          }
+        } else {
+          updatedMarkers[busId] = Marker(
+            markerId: MarkerId(busId),
+            position: newPosition,
+            icon: busIcon!,
+          );
+        }
       }
 
       setState(() {
@@ -63,14 +97,6 @@ class _TrackBusState extends State<TrackBus> {
     _streamSubscription?.cancel();
     super.dispose();
   }
-
-  late GoogleMapController mapController;
-  final LatLngBounds kfupmBounds = LatLngBounds(
-    southwest: const LatLng(26.302883027647383, 50.134502224126315),
-    northeast: const LatLng(26.314681, 50.156939),
-  );
-  final LatLng kfupmCenter =
-      const LatLng(26.307048543732158, 50.145802165049304);
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -98,6 +124,8 @@ class _TrackBusState extends State<TrackBus> {
               tiltGesturesEnabled: false,
               rotateGesturesEnabled: false,
               markers: _markers.values.toSet(),
+              myLocationEnabled: isUserInBounds,
+              myLocationButtonEnabled: isUserInBounds,
             ),
     );
   }
