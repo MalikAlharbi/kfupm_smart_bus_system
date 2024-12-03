@@ -42,11 +42,11 @@ class _TrackBusState extends State<TrackBus> {
   Future<void> _loadIcons() async {
     mapStyle = await rootBundle.loadString('assets/custom_map.json');
     maleStationIcon = await BitmapDescriptor.asset(
-      const ImageConfiguration(size: Size(27, 27)),
+      const ImageConfiguration(size: Size(20, 20)),
       'assets/images/male_station.png',
     );
     femaleStationIcon = await BitmapDescriptor.asset(
-      const ImageConfiguration(size: Size(27, 27)),
+      const ImageConfiguration(size: Size(20, 20)),
       'assets/images/female_station.png',
     );
 
