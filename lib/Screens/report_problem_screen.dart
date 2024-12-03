@@ -30,7 +30,7 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
   @override
   void initState() {
     super.initState();
-    Firebase.initializeApp(); 
+    Firebase.initializeApp();
   }
 
   Future pickImage() async {
@@ -50,57 +50,60 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
   }
 
   void _validateAndSubmit() {
-  setState(() {
-    busNumberError = null;
-    problemDescriptionError = null;
+    setState(() {
+      busNumberError = null;
+      problemDescriptionError = null;
 
-    // Validate Bus Number
-    if (_busNumberController.text.isEmpty) {
-      busNumberError = 'Please enter a bus number';
-    } else if (_busNumberController.text.length != 3) {
-      busNumberError = 'Bus number must be exactly 3 digits';
-    }
+      // Validate Bus Number only for Non-Technical Problem
+      if (_selectedProblemType == 'Non-Technical Problem') {
+        if (_busNumberController.text.isEmpty) {
+          busNumberError = 'Please enter a bus number';
+        } else if (_busNumberController.text.length != 3) {
+          busNumberError = 'Bus number must be exactly 3 digits';
+        }
+      }
 
-    // Validate Problem Description
-    if (_problemDescriptionController.text.isEmpty) {
-      problemDescriptionError = 'Please explain the problem';
-    } else if (_problemDescriptionController.text.length > 200) {
-      problemDescriptionError = 'Problem description must be under 200 characters';
-    }
+      // Validate Problem Description
+      if (_problemDescriptionController.text.isEmpty) {
+        problemDescriptionError = 'Please explain the problem';
+      } else if (_problemDescriptionController.text.length > 200) {
+        problemDescriptionError = 'Problem description must be under 200 characters';
+      }
 
-    // If no errors, submit data
+      // If no errors, submit data
     if (busNumberError == null && problemDescriptionError == null) {
-      busNumber = _busNumberController.text;
+      busNumber = _selectedProblemType == 'Non-Technical Problem'
+          ? _busNumberController.text
+          : null; // Bus number is not required for technical problems
       problemDescription = _problemDescriptionController.text;
 
-      // Log data for backend
-      print('Problem Type: $_selectedProblemType');
-      print('Bus Number: $busNumber');
-      print('Problem Description: $problemDescription');
-      print('Image File: ${imageFile?.path}'); // Log image path
-      
-      // Call the function to submit the report
-      submitReport();
+        // Log data for backend
+        print('Problem Type: $_selectedProblemType');
+        print('Bus Number: ${busNumber ?? 'null'}');
+        print('Problem Description: $problemDescription');
+        print('Image File: ${imageFile?.path}'); // Log image path
 
-      // Clear the text fields
-      _busNumberController.clear();
-      _problemDescriptionController.clear();
+        // Call the function to submit the report
+        submitReport();
 
-      // Clear the image
-      image = null;
-      imageFile = null;
+        // Clear the text fields
+        _busNumberController.clear();
+        _problemDescriptionController.clear();
 
-      // Reset the camera visibility
-      cameraVisible = false;
 
-      
-      // Show success dialog
-      _showSuccessDialog(context);
 
-      
-    }
-  });
-}
+        // Clear the image
+        image = null;
+        imageFile = null;
+
+        // Reset the camera visibility
+        cameraVisible = false;
+
+        // Show success dialog
+        _showSuccessDialog(context);
+      }
+    });
+  }
 
   void _showSuccessDialog(BuildContext context) {
     showDialog(
@@ -342,34 +345,29 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
 
   Future<void> submitReport() async {
     try {
-      final reportsCollection = FirebaseFirestore.instance.collection('report_problem');
+      final reportsCollection =
+          FirebaseFirestore.instance.collection('report_problem');
       final reportSnapshot = await reportsCollection.get();
       final reportCount = reportSnapshot.size;
-      String documentId = "report_problem_${reportCount+1}";
+      String documentId = "report_problem_${reportCount + 1}";
 
-      await FirebaseFirestore.instance.collection('report_problem').doc(documentId).set({
+      await FirebaseFirestore.instance
+          .collection('report_problem')
+          .doc(documentId)
+          .set({
         'timestamp': FieldValue.serverTimestamp(),
         'problemType': _selectedProblemType,
         'busNumber': _busNumberController.text,
         'problemDescription': _problemDescriptionController.text,
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Report submitted successfully")),
-      );
-
-      _busNumberController.clear();
-      _problemDescriptionController.clear();
-      setState(() {
-        _selectedProblemType = 'Non-Technical Problem';
-      });
-      
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(content: Text("Report submitted successfully")),
+      // );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Failed to submit report: $e")),
       );
     }
   }
-
 }
-
