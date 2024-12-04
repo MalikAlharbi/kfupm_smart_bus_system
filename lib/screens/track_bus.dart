@@ -126,6 +126,7 @@ class _TrackBusState extends State<TrackBus>
     String stationName,
     LatLng position,
     List<String> buildings,
+    String stationNumber,
   ) {
     String buildingString = '';
     for (var building in buildings) {
@@ -144,7 +145,9 @@ class _TrackBusState extends State<TrackBus>
           title: Text(stationName),
           content: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text('Station Number: $stationNumber'),
               Text('Buildings: $buildingString'),
             ],
           ),
@@ -172,7 +175,9 @@ class _TrackBusState extends State<TrackBus>
           title: Text(stationName),
           content: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text('Station Number: $stationNumber'),
               Text('Buildings: $buildingString'),
             ],
           ),
@@ -205,6 +210,7 @@ class _TrackBusState extends State<TrackBus>
             station['name'],
             station['position'],
             station['buildings'],
+            station['id'],
           ),
         ),
       );
