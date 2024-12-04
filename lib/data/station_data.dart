@@ -89,7 +89,7 @@ final List<Map<String, dynamic>> stationLocations = [
     'position': const LatLng(26.315220655307666, 50.14217618884103),
     'type': 'female',
     'name': 'Mosque Station',
-    'buildings': [],
+    'buildings': ['Dhahran Mosque'],
   },
   {
     'position': const LatLng(26.316218133251194, 50.1458911205211),

@@ -6,7 +6,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'dart:async';
 import 'package:kfupm_smart_bus_system/api/api_service.dart';
 import 'package:kfupm_smart_bus_system/data/station_data.dart'; // Import the stations data
-import 'dart:convert'; // For JSON parsing
 import 'package:flutter/services.dart'; // For loading assets
 import 'dart:io'; // For checking platform (iOS or Android)
 
@@ -222,11 +221,25 @@ class _TrackBusState extends State<TrackBus>
     super.build(context);
     return Scaffold(
       body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(
-                color: Color(0xFF179C3D),
-              ),
-            )
+          ? Center(
+        child: ColorFiltered(
+          colorFilter: const ColorFilter.mode(
+            Color(0xFF179C3D),
+            BlendMode.srcIn,
+          ),
+          child: Image.asset(
+            'assets/images/loadingPage.gif',
+            height: 500,
+            errorBuilder: (context, error, stackTrace) {
+              return const Icon(
+                Icons.error,
+                color: Colors.red,
+                size: 120,
+              );
+            },
+          ),
+        ),
+      )
           : GoogleMap(
               onMapCreated: _onMapCreated,
               initialCameraPosition: CameraPosition(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kfupm_smart_bus_system/Widgets/loading_screen.dart';
+import 'package:kfupm_smart_bus_system/main_screen/main_scafold.dart';
 
 class KfupmStudentApp extends StatelessWidget {
   const KfupmStudentApp({super.key});
@@ -250,7 +250,7 @@ class KfupmStudentApp extends StatelessWidget {
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (ctx) => const LoadingScreen(),
+                              builder: (ctx) => const MainScaffold(),
                             ),
                           );
                         },
