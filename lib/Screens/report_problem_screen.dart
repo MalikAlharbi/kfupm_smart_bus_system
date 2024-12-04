@@ -30,73 +30,8 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
   @override
   void initState() {
     super.initState();
-    Firebase.initializeApp(); 
+    Firebase.initializeApp();
   }
-
-  Future pickImage() async {
-    try {
-      final pickedImage =
-          await ImagePicker().pickImage(source: ImageSource.camera);
-      if (pickedImage == null) return;
-
-      final imageTemporary = File(pickedImage.path);
-      setState(() {
-        image = imageTemporary;
-        imageFile = imageTemporary; // Assign image to the backend variable
-      });
-    } on PlatformException catch (m) {
-      print('Failed to pick image: $m');
-    }
-  }
-
-  void _validateAndSubmit() {
-  setState(() {
-    busNumberError = null;
-    problemDescriptionError = null;
-
-    // Validate Bus Number
-    if (_busNumberController.text.isEmpty) {
-      busNumberError = 'Please enter a bus number';
-    } else if (_busNumberController.text.length != 3) {
-      busNumberError = 'Bus number must be exactly 3 digits';
-    }
-
-    // Validate Problem Description
-    if (_problemDescriptionController.text.isEmpty) {
-      problemDescriptionError = 'Please explain the problem';
-    } else if (_problemDescriptionController.text.length > 200) {
-      problemDescriptionError = 'Problem description must be under 200 characters';
-    }
-
-    // If no errors, submit data
-    if (busNumberError == null && problemDescriptionError == null) {
-      busNumber = _busNumberController.text;
-      problemDescription = _problemDescriptionController.text;
-
-      // Log data for backend
-      print('Problem Type: $_selectedProblemType');
-      print('Bus Number: $busNumber');
-      print('Problem Description: $problemDescription');
-      print('Image File: ${imageFile?.path}'); // Log image path
-      
-      // Clear the text fields
-      _busNumberController.clear();
-      _problemDescriptionController.clear();
-
-      // Clear the image
-      image = null;
-      imageFile = null;
-
-      // Reset the camera visibility
-      cameraVisible = false;
-
-      // Show success dialog
-      _showSuccessDialog(context);
-
-      
-    }
-  });
-}
 
   void _showSuccessDialog(BuildContext context) {
     showDialog(
@@ -336,36 +271,110 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
     );
   }
 
-  Future<void> submitReport() async {
+  Future pickImage() async {
     try {
-      final reportsCollection = FirebaseFirestore.instance.collection('report_problem');
+      final pickedImage =
+          await ImagePicker().pickImage(source: ImageSource.camera);
+      if (pickedImage == null) return;
+
+      final imageTemporary = File(pickedImage.path);
+      setState(() {
+        image = imageTemporary;
+        imageFile = imageTemporary; // Assign image to the backend variable
+      });
+    } on PlatformException catch (m) {
+      print('Failed to pick image: $m');
+    }
+  }
+
+  void _validateAndSubmit() {
+    setState(() {
+      busNumberError = null;
+      problemDescriptionError = null;
+
+      // Validate Bus Number only for Non-Technical Problem
+      if (_selectedProblemType == 'Non-Technical Problem') {
+        if (_busNumberController.text.isEmpty) {
+          busNumberError = 'Please enter a bus number';
+        } else if (_busNumberController.text.length != 3) {
+          busNumberError = 'Bus number must be exactly 3 digits';
+        }
+      }
+
+      // Validate Problem Description
+      if (_problemDescriptionController.text.isEmpty) {
+        problemDescriptionError = 'Please explain the problem';
+      } else if (_problemDescriptionController.text.length > 200) {
+        problemDescriptionError =
+            'Problem description must be under 200 characters';
+      }
+
+      // If no errors, submit data
+      if (busNumberError == null && problemDescriptionError == null) {
+        busNumber = _selectedProblemType == 'Non-Technical Problem'
+            ? _busNumberController.text
+            : null; // Bus number is not required for technical problems
+        problemDescription = _problemDescriptionController.text;
+
+        // Log data for backend
+        print('Problem Type: $_selectedProblemType');
+        print('Bus Number: ${busNumber ?? 'null'}');
+        print('Problem Description: $problemDescription');
+        print('Image File: ${imageFile?.path}'); // Log image path
+
+        // Call the function to submit the report
+        submitReport(_selectedProblemType, busNumber, problemDescription!)
+            .then((_) {
+          // Clear the text fields only after the report is submitted
+          _busNumberController.clear();
+          _problemDescriptionController.clear();
+
+          // Clear the image
+          image = null;
+          imageFile = null;
+
+          // Reset the camera visibility
+          cameraVisible = false;
+
+          // Show success dialog
+          _showSuccessDialog(context);
+        }).catchError((error) {
+          // Log error or show error message
+          print("Error submitting report: $error");
+        });
+      }
+    });
+  }
+
+  Future<void> submitReport(
+      String problemType, String? busNumber, String problemDescription) async {
+    try {
+      final reportsCollection =
+          FirebaseFirestore.instance.collection('report_problem');
       final reportSnapshot = await reportsCollection.get();
       final reportCount = reportSnapshot.size;
-      String documentId = "report_problem_${reportCount+1}";
+      String documentId = "report_problem_${reportCount + 1}";
 
-      await FirebaseFirestore.instance.collection('report_problem').doc(documentId).set({
+      // Debugging logs
+      print('Bus Number: ${busNumber ?? 'null'}');
+      print('Problem Description: $problemDescription');
+
+      await FirebaseFirestore.instance
+          .collection('report_problem')
+          .doc(documentId)
+          .set({
         'timestamp': FieldValue.serverTimestamp(),
-        'problemType': _selectedProblemType,
-        'busNumber': _busNumberController.text,
-        'problemDescription': _problemDescriptionController.text,
+        'problemType': problemType,
+        'busNumber': busNumber,
+        'problemDescription': problemDescription,
       });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Report submitted successfully")),
-      );
-
-      _busNumberController.clear();
-      _problemDescriptionController.clear();
-      setState(() {
-        _selectedProblemType = 'Non-Technical Problem';
-      });
-      
+      // Debugging logs
+      print("Report submitted successfully.");
     } catch (e) {
+      print("Failed to submit report: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Failed to submit report: $e")),
       );
     }
   }
-
 }
-
