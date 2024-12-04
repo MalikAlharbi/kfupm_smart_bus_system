@@ -33,22 +33,6 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
     Firebase.initializeApp();
   }
 
-  Future pickImage() async {
-    try {
-      final pickedImage =
-          await ImagePicker().pickImage(source: ImageSource.camera);
-      if (pickedImage == null) return;
-
-      final imageTemporary = File(pickedImage.path);
-      setState(() {
-        image = imageTemporary;
-        imageFile = imageTemporary; // Assign image to the backend variable
-      });
-    } on PlatformException catch (m) {
-      print('Failed to pick image: $m');
-    }
-  }
-
   void _showSuccessDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -287,7 +271,23 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
     );
   }
 
-void _validateAndSubmit() {
+  Future pickImage() async {
+    try {
+      final pickedImage =
+          await ImagePicker().pickImage(source: ImageSource.camera);
+      if (pickedImage == null) return;
+
+      final imageTemporary = File(pickedImage.path);
+      setState(() {
+        image = imageTemporary;
+        imageFile = imageTemporary; // Assign image to the backend variable
+      });
+    } on PlatformException catch (m) {
+      print('Failed to pick image: $m');
+    }
+  }
+
+  void _validateAndSubmit() {
     setState(() {
       busNumberError = null;
       problemDescriptionError = null;
@@ -305,15 +305,16 @@ void _validateAndSubmit() {
       if (_problemDescriptionController.text.isEmpty) {
         problemDescriptionError = 'Please explain the problem';
       } else if (_problemDescriptionController.text.length > 200) {
-        problemDescriptionError = 'Problem description must be under 200 characters';
+        problemDescriptionError =
+            'Problem description must be under 200 characters';
       }
 
       // If no errors, submit data
-    if (busNumberError == null && problemDescriptionError == null) {
-      busNumber = _selectedProblemType == 'Non-Technical Problem'
-          ? _busNumberController.text
-          : null; // Bus number is not required for technical problems
-      problemDescription = _problemDescriptionController.text;
+      if (busNumberError == null && problemDescriptionError == null) {
+        busNumber = _selectedProblemType == 'Non-Technical Problem'
+            ? _busNumberController.text
+            : null; // Bus number is not required for technical problems
+        problemDescription = _problemDescriptionController.text;
 
         // Log data for backend
         print('Problem Type: $_selectedProblemType');
@@ -321,35 +322,32 @@ void _validateAndSubmit() {
         print('Problem Description: $problemDescription');
         print('Image File: ${imageFile?.path}'); // Log image path
 
-
-
         // Call the function to submit the report
-        submitReport(_selectedProblemType, busNumber, problemDescription!).then((_) {
+        submitReport(_selectedProblemType, busNumber, problemDescription!)
+            .then((_) {
+          // Clear the text fields only after the report is submitted
+          _busNumberController.clear();
+          _problemDescriptionController.clear();
 
+          // Clear the image
+          image = null;
+          imageFile = null;
 
-        // Clear the text fields only after the report is submitted
-        _busNumberController.clear();
-        _problemDescriptionController.clear();
+          // Reset the camera visibility
+          cameraVisible = false;
 
-        // Clear the image
-        image = null;
-        imageFile = null;
+          // Show success dialog
+          _showSuccessDialog(context);
+        }).catchError((error) {
+          // Log error or show error message
+          print("Error submitting report: $error");
+        });
+      }
+    });
+  }
 
-        // Reset the camera visibility
-        cameraVisible = false;
-
-        // Show success dialog
-        _showSuccessDialog(context);
-      }).catchError((error) {
-        // Log error or show error message
-        print("Error submitting report: $error");
-      });
-    }
-  });
-}
-
-
-  Future<void> submitReport( String problemType, String? busNumber, String problemDescription) async {
+  Future<void> submitReport(
+      String problemType, String? busNumber, String problemDescription) async {
     try {
       final reportsCollection =
           FirebaseFirestore.instance.collection('report_problem');
@@ -357,10 +355,9 @@ void _validateAndSubmit() {
       final reportCount = reportSnapshot.size;
       String documentId = "report_problem_${reportCount + 1}";
 
-    // Debugging logs
-    print('Bus Number: ${busNumber ?? 'null'}');
-    print('Problem Description: $problemDescription');
-
+      // Debugging logs
+      print('Bus Number: ${busNumber ?? 'null'}');
+      print('Problem Description: $problemDescription');
 
       await FirebaseFirestore.instance
           .collection('report_problem')
@@ -372,8 +369,7 @@ void _validateAndSubmit() {
         'problemDescription': problemDescription,
       });
       // Debugging logs
-    print("Report submitted successfully.");
-
+      print("Report submitted successfully.");
     } catch (e) {
       print("Failed to submit report: $e");
       ScaffoldMessenger.of(context).showSnackBar(
