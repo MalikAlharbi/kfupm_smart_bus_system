@@ -17,7 +17,8 @@ class TrackBus extends StatefulWidget {
   State<TrackBus> createState() => _TrackBusState();
 }
 
-class _TrackBusState extends State<TrackBus> {
+class _TrackBusState extends State<TrackBus>
+    with AutomaticKeepAliveClientMixin {
   StreamSubscription? _streamSubscription;
   bool isLoading = true;
   bool isUserInBounds = true;
@@ -218,6 +219,7 @@ class _TrackBusState extends State<TrackBus> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: isLoading
           ? const Center(
@@ -243,4 +245,7 @@ class _TrackBusState extends State<TrackBus> {
             ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
