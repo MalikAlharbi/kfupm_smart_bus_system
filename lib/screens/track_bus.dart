@@ -1,3 +1,4 @@
+import 'package:animated_marker/animated_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -56,38 +57,45 @@ class _TrackBusState extends State<TrackBus> {
     });
   }
 
-  void _startBusLocationUpdates() {
+
+
+  late Set<Marker> tempMarker={};
+ void _startBusLocationUpdates() {
+    // LatLng oldPosition = getInitialLocation();
+    
+    late LatLng newPosition;
     _streamSubscription =
-        getAssetsLatestPositionsStream().listen((busesLocation) {
+      getAssetsLatestPositionsStream().listen((busesLocation) {
       if (!mounted || busIcon == null) return;
 
       final Map<String, Marker> updatedMarkers = {};
+     
+   
       for (var bus in busesLocation) {
         String busId = bus['assetId'].toString();
-        LatLng newPosition =
+         newPosition =
             LatLng(bus['locationLog'][0], bus['locationLog'][1]);
 
-        if (_markers.containsKey(busId)) {
-          LatLng existingPosition = _markers[busId]!.position;
-          if (existingPosition.latitude != newPosition.latitude ||
-              existingPosition.longitude != newPosition.longitude) {
-            updatedMarkers[busId] =
-                _markers[busId]!.copyWith(positionParam: newPosition);
-          } else {
-            updatedMarkers[busId] = _markers[busId]!;
-          }
-        } else {
-          updatedMarkers[busId] = Marker(
-            markerId: MarkerId(busId),
-            position: newPosition,
-            icon: busIcon!,
-          );
-        }
+
+        
+      
+        updatedMarkers[busId] = _markers.containsKey(busId)
+            ? _markers[busId]!.copyWith(positionParam: newPosition)
+            : Marker(
+                markerId: MarkerId(busId),
+                position: newPosition,
+                icon: busIcon!);
+                  
+                     
+                   
       }
+
 
       setState(() {
         _markers = updatedMarkers;
         isLoading = false;
+         tempMarker = Set<Marker>.from(updatedMarkers.values);
+        // oldPosition = newPosition;
       });
     });
   }
@@ -105,6 +113,12 @@ class _TrackBusState extends State<TrackBus> {
 
   @override
   Widget build(BuildContext context) {
+    return ScaffoldTwo();
+  }
+
+
+  
+  Widget ScaffoldTwo(){
     return Scaffold(
       body: isLoading
           ? const Center(
@@ -112,21 +126,31 @@ class _TrackBusState extends State<TrackBus> {
                 color: Color(0xFF179C3D),
               ),
             )
-          : GoogleMap(
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: kfupmCenter,
-                zoom: 15.0,
-              ),
-              minMaxZoomPreference: const MinMaxZoomPreference(15.0, 21.0),
-              cameraTargetBounds: CameraTargetBounds(kfupmBounds),
-              compassEnabled: false,
-              tiltGesturesEnabled: false,
-              rotateGesturesEnabled: false,
-              markers: _markers.values.toSet(),
-              myLocationEnabled: isUserInBounds,
-              myLocationButtonEnabled: isUserInBounds,
-            ),
+          : AnimatedMarker(
+            // staticMarkers: ,
+            animatedMarkers: tempMarker,
+            duration: Duration(seconds: 7),
+            fps: 30,
+            
+            builder: (BuildContext context, Set<Marker> animatedMarkers) { 
+              return GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: kfupmCenter,
+                  zoom: 15.0,
+                ),
+                minMaxZoomPreference: const MinMaxZoomPreference(15.0, 21.0),
+                cameraTargetBounds: CameraTargetBounds(kfupmBounds),
+                compassEnabled: false,
+                tiltGesturesEnabled: false,
+                rotateGesturesEnabled: false,
+                markers: animatedMarkers,
+                myLocationEnabled: isUserInBounds,
+                myLocationButtonEnabled: isUserInBounds,
+              );
+             },
+            
+          ),
     );
   }
 }
