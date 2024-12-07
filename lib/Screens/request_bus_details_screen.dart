@@ -73,10 +73,6 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-
-    // // Initialize date and time controllers with current values
-    // dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    // timeController.text = DateFormat.jm().format(DateTime.now());
   }
 
   @override
@@ -125,10 +121,15 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
 
   // Old Requests Tab
   Widget buildOldRequests() {
+    // Filter requests by the selected club
+    final filteredRequests =
+        oldRequests.where((req) => req['clubName'] == widget.selectedClub).toList();
+
+    // Sort filtered requests by status
     final sortedRequests = [
-      ...oldRequests.where((req) => req['status'] == 'In Process'),
-      ...oldRequests.where((req) => req['status'] == 'Approved'),
-      ...oldRequests.where((req) => req['status'] == 'Rejected'),
+      ...filteredRequests.where((req) => req['status'] == 'In Process'),
+      ...filteredRequests.where((req) => req['status'] == 'Approved'),
+      ...filteredRequests.where((req) => req['status'] == 'Rejected'),
     ];
 
     return ListView.builder(
@@ -205,9 +206,7 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
               height: 5,
             ),
             buildDatePickerField(context, 'Select Date', dateController),
-
             buildTimePickerField(context, 'Select Time', timeController),
-
             buildTextField(
               'Destination',
               destinationController,
@@ -239,7 +238,6 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
               maxLines: 3,
             ),
             const SizedBox(height: 30),
-            // Submit Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -268,7 +266,6 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
     );
   }
 
-  // Build Text Fields with Validation
   Widget buildTextField(
     String label,
     TextEditingController controller, {
@@ -300,7 +297,6 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
     );
   }
 
-  // Validation and Submission
   void validateAndSubmit(BuildContext context) {
     // Hide the keyboard
     FocusScope.of(context).unfocus();
@@ -326,7 +322,6 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
           : null; // Validate time
     });
 
-    // If all validations pass
     if (destinationError == null &&
         busesError == null &&
         assemblyError == null &&
@@ -337,56 +332,47 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
         context: context,
         builder: (context) => Dialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16), // Rounded corners
+            borderRadius: BorderRadius.circular(16),
           ),
           child: Container(
-            padding: const EdgeInsets.all(20), // Add some padding
-            decoration: BoxDecoration(
-              color: Colors.white, // Dialog background color
-              borderRadius: BorderRadius.circular(16),
-            ),
+            padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Success Icon
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors
-                        .green[100], // Light green background for the icon
+                    color: Colors.green[100],
                     shape: BoxShape.circle,
                   ),
                   padding: const EdgeInsets.all(16),
                   child: Icon(
                     Icons.check_circle,
                     size: 72,
-                    color: Colors.green[700], // Darker green for the icon
+                    color: Colors.green[700],
                   ),
                 ),
-                const SizedBox(height: 16), // Add spacing
-                // Title
+                const SizedBox(height: 16),
                 const Text(
                   'Request Sent',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87, // Dark text color
+                    color: Colors.black87,
                   ),
                 ),
                 const SizedBox(height: 8),
-                // Subtitle
                 const Text(
                   'Your request has been submitted successfully.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.black54, // Subtle text color
+                    color: Colors.black54,
                   ),
                 ),
                 const SizedBox(height: 24),
-                // Action Button
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop(); // Close the dialog
+                    Navigator.of(context).pop();
                     setState(() {
                       oldRequests.add({
                         'requestNumber':
@@ -401,10 +387,8 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
                         'clubName': widget.selectedClub,
                       });
                       requestCounter++;
-                      dateController.text =
-                          DateFormat('yyyy-MM-dd').format(DateTime.now());
-                      timeController.text =
-                          DateFormat.jm().format(DateTime.now());
+                      dateController.clear();
+                      timeController.clear();
                       destinationController.clear();
                       busesController.clear();
                       assemblyController.clear();
@@ -417,7 +401,7 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
                     padding: const EdgeInsets.symmetric(
                         vertical: 12, horizontal: 24),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8), // Rounded button
+                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   child: const Text(
@@ -442,7 +426,7 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
         readOnly: true,
         decoration: InputDecoration(
           labelText: label,
-          errorText: dateError, // Show error text for date
+          errorText: dateError,
           labelStyle: const TextStyle(fontSize: 19),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
@@ -475,7 +459,7 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
         readOnly: true,
         decoration: InputDecoration(
           labelText: label,
-          errorText: timeError, // Show error text for time
+          errorText: timeError,
           labelStyle: const TextStyle(fontSize: 19),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
