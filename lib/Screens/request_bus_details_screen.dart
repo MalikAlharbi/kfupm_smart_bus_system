@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -22,7 +23,7 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
   final TextEditingController assemblyController = TextEditingController();
   final TextEditingController reasonController = TextEditingController();
 
-  int requestCounter = 4; // Counter to generate new request numbers
+
 
   // Mutable list to store old requests
   final List<Map<String, String>> oldRequests = [
@@ -69,10 +70,12 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
   String? dateError;
   String? timeError;
 
+//List<Map<String, dynamic>> oldRequests = [];
+
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 2, vsync: this); 
   }
 
   @override
@@ -85,26 +88,13 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Bus Request Details',
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.green[700],
-        iconTheme: const IconThemeData(color: Colors.white),
+        title: Text('Request Bus Details for ${widget.selectedClub}'),
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
             Tab(text: 'Old Requests'),
             Tab(text: 'New Request'),
           ],
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white70,
-          indicatorColor: Colors.white,
-          labelStyle: const TextStyle(fontSize: 17),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: TabBarView(
@@ -243,6 +233,17 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
               child: ElevatedButton.icon(
                 onPressed: () {
                   validateAndSubmit(context);
+
+                  submitRequest(
+                    context,
+                    dateController.text,
+                    timeController.text,
+                    destinationController.text,
+                    busesController.text,
+                    assemblyController.text,
+                    reasonController.text,
+                    widget.selectedClub,
+                  );
                 },
                 icon: const Icon(
                   Icons.send,
@@ -376,7 +377,7 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
                     setState(() {
                       oldRequests.add({
                         'requestNumber':
-                            'REQ${requestCounter.toString().padLeft(3, '0')}',
+                            'REQ${(oldRequests.length + 1).toString().padLeft(3, '0')}',
                         'status': 'In Process',
                         'date': dateController.text,
                         'time': timeController.text,
@@ -386,7 +387,6 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
                         'reason': reasonController.text,
                         'clubName': widget.selectedClub,
                       });
-                      requestCounter++;
                       dateController.clear();
                       timeController.clear();
                       destinationController.clear();
@@ -480,4 +480,42 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
       ),
     );
   }
+
+// Function to submit the form data to Firebase
+Future<void> submitRequest(
+  BuildContext context,
+  String date,
+  String time,
+  String destination,
+  String numberOfBuses,
+  String assemblyLocation,
+  String reason,
+  String clubName,
+) async {
+  try {
+    final requestsCollection =
+        FirebaseFirestore.instance.collection('Event');
+    final requestSnapshot = await requestsCollection.get();
+    final requestCount = requestSnapshot.size;
+    String documentId = "event_${requestCount + 1}";
+    String requestNumber = "REQ${(requestCount + 1).toString().padLeft(3, '0')}";
+
+    await requestsCollection.doc(documentId).set({
+      'requestNumber': requestNumber,
+      'status': 'In Process', // Default status
+      'date': date,
+      'timeOfEvent': time,
+      'destination': destination,
+      'numberOfBuses': numberOfBuses,
+      'assemblyLocation': assemblyLocation,
+      'reasonOfEvent': reason,
+      'clubName': clubName,
+      'timestamp': FieldValue.serverTimestamp(), // For sorting
+    });
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Failed to submit request: $e")),
+    );
+  }
+}
 }
