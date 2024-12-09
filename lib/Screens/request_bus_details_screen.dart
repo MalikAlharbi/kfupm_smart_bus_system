@@ -23,44 +23,7 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
   final TextEditingController assemblyController = TextEditingController();
   final TextEditingController reasonController = TextEditingController();
 
-
-
-  // Mutable list to store old requests
-  final List<Map<String, String>> oldRequests = [
-    {
-      'requestNumber': 'REQ001',
-      'status': 'In Process',
-      'date': '2024-11-23',
-      'time': '10:00 AM',
-      'destination': 'Photography Club Event',
-      'numberOfBuses': '2',
-      'assemblyLocation': 'Main Gate',
-      'reason': 'Club Meeting',
-      'clubName': 'Photography Club'
-    },
-    {
-      'requestNumber': 'REQ002',
-      'status': 'Approved',
-      'date': '2024-11-20',
-      'time': '1:00 PM',
-      'destination': 'Robotics Competition',
-      'numberOfBuses': '3',
-      'assemblyLocation': 'Building 5',
-      'reason': 'Competition',
-      'clubName': 'Robotics Club'
-    },
-    {
-      'requestNumber': 'REQ003',
-      'status': 'Rejected',
-      'date': '2024-11-15',
-      'time': '3:30 PM',
-      'destination': 'Art Exhibition',
-      'numberOfBuses': '1',
-      'assemblyLocation': 'Auditorium',
-      'reason': 'Art Display',
-      'clubName': 'Art Club'
-    },
-  ];
+  List<Map<String, dynamic>> oldRequests = [];
 
   // Error messages for validation
   String? destinationError;
@@ -75,7 +38,8 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this); 
+    _tabController = TabController(length: 2, vsync: this);
+    loadClubRequests();
   }
 
   @override
@@ -111,9 +75,13 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
 
   // Old Requests Tab
   Widget buildOldRequests() {
+    // debug message
+    print('Old requests size: ${oldRequests.length}');
+
     // Filter requests by the selected club
-    final filteredRequests =
-        oldRequests.where((req) => req['clubName'] == widget.selectedClub).toList();
+    final filteredRequests = oldRequests
+        .where((req) => req['clubName'] == widget.selectedClub)
+        .toList();
 
     // Sort filtered requests by status
     final sortedRequests = [
@@ -121,6 +89,12 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
       ...filteredRequests.where((req) => req['status'] == 'Approved'),
       ...filteredRequests.where((req) => req['status'] == 'Rejected'),
     ];
+
+    if (sortedRequests.isEmpty) {
+      return const Center(
+        child: Text('No requests available for this club.'),
+      );
+    }
 
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),
@@ -233,17 +207,6 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
               child: ElevatedButton.icon(
                 onPressed: () {
                   validateAndSubmit(context);
-
-                  submitRequest(
-                    context,
-                    dateController.text,
-                    timeController.text,
-                    destinationController.text,
-                    busesController.text,
-                    assemblyController.text,
-                    reasonController.text,
-                    widget.selectedClub,
-                  );
                 },
                 icon: const Icon(
                   Icons.send,
@@ -372,21 +335,28 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     Navigator.of(context).pop();
+
+                    await submitRequest(
+                      context,
+                      dateController.text,
+                      timeController.text,
+                      destinationController.text,
+                      busesController.text,
+                      assemblyController.text,
+                      reasonController.text,
+                      widget.selectedClub,
+                    );
+
+                    // debug message
+                    print('Request submitted successfully.');
+
+                    // Reload the requests after submission
+                    await loadClubRequests();
+
                     setState(() {
-                      oldRequests.add({
-                        'requestNumber':
-                            'REQ${(oldRequests.length + 1).toString().padLeft(3, '0')}',
-                        'status': 'In Process',
-                        'date': dateController.text,
-                        'time': timeController.text,
-                        'destination': destinationController.text,
-                        'numberOfBuses': busesController.text,
-                        'assemblyLocation': assemblyController.text,
-                        'reason': reasonController.text,
-                        'clubName': widget.selectedClub,
-                      });
+                      // Clear the form
                       dateController.clear();
                       timeController.clear();
                       destinationController.clear();
@@ -482,40 +452,74 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
   }
 
 // Function to submit the form data to Firebase
-Future<void> submitRequest(
-  BuildContext context,
-  String date,
-  String time,
-  String destination,
-  String numberOfBuses,
-  String assemblyLocation,
-  String reason,
-  String clubName,
-) async {
-  try {
-    final requestsCollection =
-        FirebaseFirestore.instance.collection('Event');
-    final requestSnapshot = await requestsCollection.get();
-    final requestCount = requestSnapshot.size;
-    String documentId = "event_${requestCount + 1}";
-    String requestNumber = "REQ${(requestCount + 1).toString().padLeft(3, '0')}";
+  Future<void> submitRequest(
+    BuildContext context,
+    String date,
+    String time,
+    String destination,
+    String numberOfBuses,
+    String assemblyLocation,
+    String reason,
+    String clubName,
+  ) async {
+    try {
+      final requestsCollection = FirebaseFirestore.instance.collection('Event');
+      final requestSnapshot = await requestsCollection.get();
+      final requestCount = requestSnapshot.size;
+      String documentId = "event_${requestCount + 1}";
+      String requestNumber =
+          "REQ${(requestCount + 1).toString().padLeft(3, '0')}";
 
-    await requestsCollection.doc(documentId).set({
-      'requestNumber': requestNumber,
-      'status': 'In Process', // Default status
-      'date': date,
-      'timeOfEvent': time,
-      'destination': destination,
-      'numberOfBuses': numberOfBuses,
-      'assemblyLocation': assemblyLocation,
-      'reasonOfEvent': reason,
-      'clubName': clubName,
-      'timestamp': FieldValue.serverTimestamp(), // For sorting
-    });
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Failed to submit request: $e")),
-    );
+      await requestsCollection.doc(documentId).set({
+        'requestNumber': requestNumber,
+        'status': 'In Process', // Default status
+        'date': date,
+        'timeOfEvent': time,
+        'destination': destination,
+        'numberOfBuses': numberOfBuses,
+        'assemblyLocation': assemblyLocation,
+        'reasonOfEvent': reason,
+        'clubName': clubName,
+        'timestamp': FieldValue.serverTimestamp(), // For sorting
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to submit request: $e")),
+      );
+    }
   }
-}
+
+  Future<void> loadClubRequests() async {
+    try {
+      final requestsCollection = FirebaseFirestore.instance.collection('Event');
+      final querySnapshot = await requestsCollection
+          .where('clubName', isEqualTo: widget.selectedClub)
+          //.orderBy('timestamp', descending: true)
+          .get();
+
+      print('Documents retrieved: ${querySnapshot.docs.length}');
+      for (var doc in querySnapshot.docs) {
+        print('Document data: ${doc.data()}');
+      }
+
+      setState(() {
+        oldRequests = querySnapshot.docs.map((doc) {
+          final data = doc.data();
+          return {
+            'requestNumber': data['requestNumber'] ?? '',
+            'status': data['status'] ?? '',
+            'date': data['date'] ?? '',
+            'time': data['timeOfEvent'] ?? '',
+            'destination': data['destination'] ?? '',
+            'numberOfBuses': data['numberOfBuses'] ?? '',
+            'assemblyLocation': data['assemblyLocation'] ?? '',
+            'reason': data['reasonOfEvent'] ?? '',
+            'clubName': data['clubName'] ?? '',
+          };
+        }).toList();
+      });
+    } catch (e) {
+      print("Error loading requests: $e");
+    }
+  }
 }
