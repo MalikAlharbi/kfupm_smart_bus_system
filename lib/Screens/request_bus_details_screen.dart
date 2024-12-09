@@ -52,13 +52,27 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Request Bus Details for ${widget.selectedClub}'),
+        title: Text(
+          '${widget.selectedClub} Requests',
+          style: const TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.green[700],
+        iconTheme: const IconThemeData(color: Colors.white),
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
             Tab(text: 'Old Requests'),
             Tab(text: 'New Request'),
           ],
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.white70,
+          indicatorColor: Colors.white,
+          labelStyle: const TextStyle(fontSize: 17),
+        ),
+        // what does this part do?!?!
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: TabBarView(
