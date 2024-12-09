@@ -43,10 +43,8 @@ class _MainScaffoldState extends State<MainScaffold> {
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
-      _pageController.animateToPage(
+      _pageController.jumpToPage(
         _currentIndex,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
       );
     });
   }

@@ -6,7 +6,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'dart:async';
 import 'package:kfupm_smart_bus_system/api/api_service.dart';
 import 'package:kfupm_smart_bus_system/data/station_data.dart'; // Import the stations data
-import 'dart:convert'; // For JSON parsing
 import 'package:flutter/services.dart'; // For loading assets
 import 'dart:io'; // For checking platform (iOS or Android)
 
@@ -17,7 +16,8 @@ class TrackBus extends StatefulWidget {
   State<TrackBus> createState() => _TrackBusState();
 }
 
-class _TrackBusState extends State<TrackBus> {
+class _TrackBusState extends State<TrackBus>
+    with AutomaticKeepAliveClientMixin {
   StreamSubscription? _streamSubscription;
   bool isLoading = true;
   bool isUserInBounds = true;
@@ -126,6 +126,7 @@ class _TrackBusState extends State<TrackBus> {
     String stationName,
     LatLng position,
     List<String> buildings,
+    String stationNumber,
   ) {
     String buildingString = '';
     for (var building in buildings) {
@@ -144,7 +145,9 @@ class _TrackBusState extends State<TrackBus> {
           title: Text(stationName),
           content: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text('Station Number: $stationNumber'),
               Text('Buildings: $buildingString'),
             ],
           ),
@@ -172,7 +175,9 @@ class _TrackBusState extends State<TrackBus> {
           title: Text(stationName),
           content: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text('Station Number: $stationNumber'),
               Text('Buildings: $buildingString'),
             ],
           ),
@@ -205,6 +210,7 @@ class _TrackBusState extends State<TrackBus> {
             station['name'],
             station['position'],
             station['buildings'],
+            station['id'],
           ),
         ),
       );
@@ -218,13 +224,28 @@ class _TrackBusState extends State<TrackBus> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(
-                color: Color(0xFF179C3D),
-              ),
-            )
+          ? Center(
+        child: ColorFiltered(
+          colorFilter: const ColorFilter.mode(
+            Color(0xFF179C3D),
+            BlendMode.srcIn,
+          ),
+          child: Image.asset(
+            'assets/images/loadingPage.gif',
+            height: 500,
+            errorBuilder: (context, error, stackTrace) {
+              return const Icon(
+                Icons.error,
+                color: Colors.red,
+                size: 120,
+              );
+            },
+          ),
+        ),
+      )
           : GoogleMap(
               onMapCreated: _onMapCreated,
               initialCameraPosition: CameraPosition(
@@ -243,4 +264,7 @@ class _TrackBusState extends State<TrackBus> {
             ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
