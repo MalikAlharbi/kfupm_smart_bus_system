@@ -69,7 +69,6 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
           indicatorColor: Colors.white,
           labelStyle: const TextStyle(fontSize: 17),
         ),
-        // what does this part do?!?!
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
