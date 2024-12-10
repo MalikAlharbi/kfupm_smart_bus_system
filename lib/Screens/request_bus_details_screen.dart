@@ -483,14 +483,25 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
       String requestNumber =
           "REQ${(requestCount + 1).toString().padLeft(3, '0')}";
 
-      // Convert the date string to a DateTime object
-      DateTime parsedDate = DateTime.parse(date);
+    // Parse the date and time
+    DateTime parsedDate = DateTime.parse(date); // "2024-12-26"
+    DateTime parsedTime = DateFormat.jm().parse(time); // "5:03 AM"
+
+    // Combine date and time
+    DateTime combinedDateTime = DateTime(
+      parsedDate.year,
+      parsedDate.month,
+      parsedDate.day,
+      parsedTime.hour,
+      parsedTime.minute,
+    );
 
       await requestsCollection.doc(documentId).set({
         'requestNumber': requestNumber,
         'status': 'In Process', // Default status
-        'date': Timestamp.fromDate(parsedDate), // Save as Firestore Timestamp
+        'date': date,
         'timeOfEvent': time,
+        'dateTime': Timestamp.fromDate(combinedDateTime), // Combined date and time
         'destination': destination,
         'numberOfBuses': numberOfBuses,
         'assemblyLocation': assemblyLocation,
@@ -502,6 +513,7 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Failed to submit request: $e")),
       );
+      print("Error submitting request: $e");
     }
   }
 
