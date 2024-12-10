@@ -33,16 +33,20 @@ class _EventsScreenState extends State<EventsScreen> {
           .orderBy('dateTime', descending: false)
           .get();
 
-      setState(() {
-        approvedEvents = snapshot.docs
-            .map((doc) => doc.data() as Map<String, dynamic>)
-            .toList();
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          approvedEvents = snapshot.docs
+              .map((doc) => doc.data() as Map<String, dynamic>)
+              .toList();
+          isLoading = false;
+        });
+        }
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
       debugPrint('Error fetching events: $e');
     }
   }
@@ -106,7 +110,8 @@ class EventCard extends StatelessWidget {
                 Icons.location_on, 'Destination', event['destination']),
             buildEventDetail(
                 Icons.place, 'Assembly Location', event['assemblyLocation']),
-            buildEventDetail(Icons.event_note, 'Reason', event['reasonOfEvent']),
+            buildEventDetail(
+                Icons.event_note, 'Reason', event['reasonOfEvent']),
           ],
         ),
       ),
