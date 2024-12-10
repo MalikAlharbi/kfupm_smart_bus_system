@@ -1,0 +1,192 @@
+/* General container styling */
+.bus-requests-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Title styling */
+  .bus-requests-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #32a852;
+  }
+  
+  /* Filter buttons */
+  .filter-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 10px;
+  }
+  
+  .filter-buttons button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: 1px solid #32a852;
+    background-color: #ffffff;
+    color: #32a852;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .filter-buttons button:hover {
+    background-color: #32a852;
+    color: #ffffff;
+  }
+  
+  .filter-buttons .active {
+    background-color: #32a852;
+    color: #ffffff;
+  }
+  
+  /* Table styling */
+  .users-table {
+    width: 95%;
+    margin: 20px auto;
+    border-collapse: collapse;
+  }
+  
+  .users-table th,
+  .users-table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .users-table th {
+    background-color: #32a852;
+    color: #ffffff;
+  }
+  
+  .odd-row {
+    background-color: #f9f9f9;
+  }
+  
+  .even-row {
+    background-color: #ffffff;
+  }
+  
+  .users-table tr:hover {
+    background-color: #e2e2e2;
+  }
+  
+  /* Loading spinner */
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    font-size: 1.2rem;
+    color: #32a852;
+  }
+  
+  .spinner {
+    border: 4px solid rgba(0, 0, 0, 0.2);
+    border-top: 4px solid #32a852;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Modal */
+  .user-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-content h2 {
+    margin-top: 0;
+    color: #32a852;
+  }
+  
+  .modal-content p {
+    margin: 10px 0;
+  }
+
+  .users-table tr {
+    cursor: pointer;
+  }
+  
+  .users-table tr:hover {
+    background-color: rgba(50, 168, 82, 0.2); /* Highlight row */
+  }
+  
+  /* Red exit button */
+/* User modal close button (red X inside modal) */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: darkslategray;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .close-button:hover {
+    background-color: #d62828;
+    color: white;
+  }
+  
+  /* Modal content styling */
+  .modal-content {
+    position: relative;
+    background-color: #1e1e1e;
+    color: darkslategrey;
+    background-color: whitesmoke;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
+    width: 80%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  /* User Icon Styling */
+.user-icon-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  
+  .user-icon {
+    font-size: 5rem; /* Large size for the icon */
+    color: #32a852; /* Green color for the icon */
+    margin-bottom: 10px;
+  }
+  .back-button {
+    background-color: #32a852;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+.back-button:hover {
+  background-color: #248f3d;
+}
