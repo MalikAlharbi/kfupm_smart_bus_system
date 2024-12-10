@@ -467,7 +467,7 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
 // Function to submit the form data to Firebase
   Future<void> submitRequest(
     BuildContext context,
-    String date,
+    String date, 
     String time,
     String destination,
     String numberOfBuses,
@@ -483,10 +483,13 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
       String requestNumber =
           "REQ${(requestCount + 1).toString().padLeft(3, '0')}";
 
+      // Convert the date string to a DateTime object
+      DateTime parsedDate = DateTime.parse(date);
+
       await requestsCollection.doc(documentId).set({
         'requestNumber': requestNumber,
         'status': 'In Process', // Default status
-        'date': date,
+        'date': Timestamp.fromDate(parsedDate), // Save as Firestore Timestamp
         'timeOfEvent': time,
         'destination': destination,
         'numberOfBuses': numberOfBuses,
