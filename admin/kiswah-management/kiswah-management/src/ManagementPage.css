@@ -1,0 +1,105 @@
+/* General container styling */
+* {
+  user-select: none;
+}
+
+.management-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  background: linear-gradient(135deg, #ffffff, #70d07b); /* Green gradient background */
+  font-family: 'Arial', sans-serif;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Header styling (for title) */
+.management-header {
+  margin-bottom: 40px;
+}
+
+.management-title {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #0e5f0e;
+}
+
+/* Button container styling */
+.button-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 buttons side-by-side by default */
+  gap: 20px; /* Space between buttons */
+  width: 100%;
+  max-width: 600px; /* Restrict container width */
+  padding: 0 20px; /* Add padding to ensure spacing around edges */
+}
+
+/* Button styling */
+.management-button {
+  background-color: #ffffff;
+  color: #32a852; /* Green text */
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 20px;
+  width: 100%;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 10px 0; /* Add vertical margin for spacing */
+}
+
+/* Icon styling for buttons */
+.button-icon {
+  width: 50px; /* Icon width */
+  height: 50px; /* Icon height */
+  margin-bottom: 10px; /* Spacing between the icon and text */
+}
+
+/* Hover effect for buttons */
+.management-button:hover {
+  background-color: #32a852; /* Green hover background */
+  color: #ffffff; /* White text on hover */
+  transform: translateY(-5px); /* Lift the button */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Add shadow on hover */
+}
+
+.button-icon:hover {
+  filter: brightness(0.8); /* Slight dimming effect when hovered */
+}
+
+/* Responsive styles for medium screens */
+@media (max-width: 768px) {
+  .button-container {
+    grid-template-columns: 1fr; /* Stack buttons vertically */
+    padding: 0 15px; /* Reduce padding for smaller screens */
+  }
+
+  .management-button {
+    font-size: 1.2rem; /* Smaller button font size */
+    padding: 15px;
+    margin: 10px 0; /* Ensure consistent spacing */
+  }
+}
+
+/* Adjustments for very small screens */
+@media (max-width: 480px) {
+  .management-title {
+    font-size: 1.8rem; /* Smaller title font size */
+  }
+
+  .management-button {
+    font-size: 1rem; /* Further smaller font size */
+    padding: 10px; /* Adjusted padding */
+    margin: 10px 0; /* Maintain spacing */
+  }
+}
