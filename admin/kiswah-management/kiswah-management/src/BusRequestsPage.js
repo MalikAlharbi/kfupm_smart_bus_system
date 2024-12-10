@@ -127,7 +127,7 @@ function BusRequestsPage() {
                   <td>{request.clubName || "N/A"}</td>
                   <td>
                     {request.status === "In Process" && (
-                      <>
+                      <div className="actions">
                         <button
                           onClick={() =>
                             updateRequestStatus(request.id, "Approved")
@@ -159,7 +159,7 @@ function BusRequestsPage() {
                         >
                           Reject
                         </button>
-                      </>
+                      </div>
                     )}
                   </td>
                 </tr>
