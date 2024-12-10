@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class EventsScreen extends StatefulWidget {
@@ -8,45 +9,47 @@ class EventsScreen extends StatefulWidget {
 }
 
 class _EventsScreenState extends State<EventsScreen> {
-  // Dummy data for approved events
-  final List<Map<String, String>> approvedEvents = [
-    {
-      'status': 'Approved',
-      'date': '2024-11-30',
-      'time': '3:00 PM',
-      'destination': 'Photography Club Event',
-      'assemblyLocation': 'Main Gate',
-      'reason': 'Annual Club Meeting',
-      'clubName': 'Photography Club',
-    },
-    {
-      'status': 'Approved',
-      'date': '2024-12-05',
-      'time': '10:00 AM',
-      'destination': 'Robotics Competition',
-      'assemblyLocation': 'Engineering Building',
-      'reason': 'National Robotics Competition',
-      'clubName': 'Robotics Club',
-    },
-    {
-      'status': 'Approved',
-      'date': '2024-12-15',
-      'time': '1:30 PM',
-      'destination': 'Art Exhibition',
-      'assemblyLocation': 'Auditorium',
-      'reason': 'Displaying Student Artworks',
-      'clubName': 'Art Club',
-    },
-    {
-      'status': 'Approved',
-      'date': '2025-12-16',
-      'time': '1:20 PM',
-      'destination': 'Art Exhibition',
-      'assemblyLocation': 'Auditorium',
-      'reason': 'Displaying Artworks',
-      'clubName': 'Computer Club',
-    },
-  ];
+  // Firestore instance
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // List to hold events fetched from Firestore
+  List<Map<String, dynamic>> approvedEvents = [];
+
+  // Loading indicator
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadEvents();
+  }
+
+  // Fetch events from Firestore
+  Future<void> loadEvents() async {
+    try {
+      QuerySnapshot snapshot = await _firestore
+          .collection('Event')
+          .where('status', isEqualTo: 'Approved')
+          .orderBy('dateTime', descending: false)
+          .get();
+
+      if (mounted) {
+        setState(() {
+          approvedEvents = snapshot.docs
+              .map((doc) => doc.data() as Map<String, dynamic>)
+              .toList();
+          isLoading = false;
+        });
+        }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+      debugPrint('Error fetching events: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +69,7 @@ class _EventsScreenState extends State<EventsScreen> {
 }
 
 class EventCard extends StatelessWidget {
-  final Map<String, String> event;
+  final Map<String, dynamic> event;
 
   const EventCard({super.key, required this.event});
 
@@ -102,12 +105,13 @@ class EventCard extends StatelessWidget {
 
             // Event Details
             buildEventDetail(Icons.calendar_today, 'Date', event['date']),
-            buildEventDetail(Icons.access_time, 'Time', event['time']),
+            buildEventDetail(Icons.access_time, 'Time', event['timeOfEvent']),
             buildEventDetail(
                 Icons.location_on, 'Destination', event['destination']),
             buildEventDetail(
                 Icons.place, 'Assembly Location', event['assemblyLocation']),
-            buildEventDetail(Icons.event_note, 'Reason', event['reason']),
+            buildEventDetail(
+                Icons.event_note, 'Reason', event['reasonOfEvent']),
           ],
         ),
       ),
