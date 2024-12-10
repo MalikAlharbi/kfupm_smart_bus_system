@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kfupm_smart_bus_system/Screens/request_bus_details_screen.dart';
@@ -28,8 +29,50 @@ class _RequestBusState extends State<RequestBus> {
     'Toastmasters Club': '1',
   };
 
+  void _showClubPicker(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 216,
+          padding: const EdgeInsets.only(top: 6.0),
+          margin: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          color: CupertinoColors.systemBackground.resolveFrom(context),
+          child: SafeArea(
+            top: false,
+            child: CupertinoPicker(
+              magnification: 1.22,
+              squeeze: 1.2,
+              useMagnifier: true,
+              itemExtent: 32.0,
+              onSelectedItemChanged: (int selectedItem) {
+                setState(() {
+                  selectedClub = clubsWithKeys.keys.toList()[selectedItem];
+                  clubSelectionError = null;
+                  keyController.clear();
+                });
+              },
+              children: List<Widget>.generate(clubsWithKeys.keys.length, (int index) {
+                return Center(
+                  child: Text(
+                    clubsWithKeys.keys.toList()[index],
+                    style: const TextStyle(fontSize: 22.0),
+                  ),
+                );
+              }),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -40,36 +83,65 @@ class _RequestBusState extends State<RequestBus> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                DropdownButtonFormField<String>(
-                  value: selectedClub,
-                  decoration: const InputDecoration(
-                    labelText: 'Select Club',
-                    labelStyle: TextStyle(fontSize: 19),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(16),
+                if (isIOS)
+                  CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () => _showClubPicker(context),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: CupertinoColors.systemGrey4),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            selectedClub ?? 'Select Club',
+                            style: TextStyle(
+                              color: selectedClub == null 
+                                ? CupertinoColors.systemGrey 
+                                : CupertinoColors.black,
+                              fontSize: 19,
+                            ),
+                          ),
+                          const Icon(CupertinoIcons.chevron_down, color: CupertinoColors.systemGrey),
+                        ],
                       ),
                     ),
-                    prefixIcon: Icon(Icons.group),
-                  ),
-                  items: clubsWithKeys.keys.map((club) {
-                    return DropdownMenuItem(
-                      value: club,
-                      child: Text(
-                        club,
-                        style: const TextStyle(fontSize: 19),
+                    
+                  )
+                else
+                  DropdownButtonFormField<String>(
+                    value: selectedClub,
+                    decoration: const InputDecoration(
+                      labelText: 'Select Club',
+                      labelStyle: TextStyle(fontSize: 19),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(16),
+                        ),
                       ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedClub = value;
-                      clubSelectionError =
-                          null; // Clear error when a club is selected
-                      keyController.clear(); // Clear the pass key field
-                    });
-                  },
-                ),
+                      prefixIcon: Icon(Icons.group),
+                    ),
+                    items: clubsWithKeys.keys.map((club) {
+                      return DropdownMenuItem(
+                        value: club,
+                        child: Text(
+                          club,
+                          style: const TextStyle(fontSize: 19),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedClub = value;
+                        clubSelectionError =
+                            null; // Clear error when a club is selected
+                        keyController.clear(); // Clear the pass key field
+                      });
+                    },
+                  ),
                 if (clubSelectionError != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),

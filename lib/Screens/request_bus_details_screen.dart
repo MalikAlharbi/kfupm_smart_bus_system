@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -401,7 +403,10 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
   }
 
   Widget buildDatePickerField(
-      BuildContext context, String label, TextEditingController controller) {
+    BuildContext context,
+    String label,
+    TextEditingController controller,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: TextField(
@@ -417,16 +422,36 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
           prefixIcon: const Icon(Icons.calendar_today),
         ),
         onTap: () async {
-          DateTime? pickedDate = await showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime.now(),
-            lastDate: DateTime(2030),
-          );
-          if (pickedDate != null) {
-            setState(() {
-              controller.text = DateFormat('yyyy-MM-dd').format(pickedDate);
-            });
+          if (Platform.isIOS) {
+            // iOS date picker
+            DateTime? pickedDate = await showModalBottomSheet<DateTime>(
+              context: context,
+              builder: (BuildContext context) {
+                return CupertinoDatePicker(
+                  mode: CupertinoDatePickerMode.date,
+                  initialDateTime: DateTime.now(),
+                  onDateTimeChanged: (DateTime newDate) {
+                    setState(() {
+                      controller.text =
+                          DateFormat('yyyy-MM-dd').format(newDate);
+                    });
+                  },
+                );
+              },
+            );
+          } else {
+            // Android date picker
+            DateTime? pickedDate = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime.now(),
+              lastDate: DateTime(2030),
+            );
+            if (pickedDate != null) {
+              setState(() {
+                controller.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+              });
+            }
           }
         },
       ),
@@ -450,14 +475,35 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
           prefixIcon: const Icon(Icons.access_time),
         ),
         onTap: () async {
-          TimeOfDay? pickedTime = await showTimePicker(
-            context: context,
-            initialTime: TimeOfDay.now(),
-          );
-          if (pickedTime != null) {
-            setState(() {
-              controller.text = pickedTime.format(context);
-            });
+          // Check for iOS platform
+          if (Platform.isIOS) {
+            // Use a native iOS time picker
+            TimeOfDay? pickedTime = await showModalBottomSheet<TimeOfDay>(
+              context: context,
+              builder: (BuildContext context) {
+                return CupertinoTimerPicker(
+                  mode: CupertinoTimerPickerMode.hm,
+                  onTimerDurationChanged: (Duration newDuration) {
+                    final time =
+                        TimeOfDay.fromDateTime(DateTime(0).add(newDuration));
+                    setState(() {
+                      controller.text = time.format(context);
+                    });
+                  },
+                );
+              },
+            );
+          } else {
+            // Use a material time picker for Android
+            TimeOfDay? pickedTime = await showTimePicker(
+              context: context,
+              initialTime: TimeOfDay.now(),
+            );
+            if (pickedTime != null) {
+              setState(() {
+                controller.text = pickedTime.format(context);
+              });
+            }
           }
         },
       ),
@@ -467,7 +513,7 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
 // Function to submit the form data to Firebase
   Future<void> submitRequest(
     BuildContext context,
-    String date, 
+    String date,
     String time,
     String destination,
     String numberOfBuses,
@@ -483,25 +529,26 @@ class _RequestBusDetailsPageState extends State<RequestBusDetailsPage>
       String requestNumber =
           "REQ${(requestCount + 1).toString().padLeft(3, '0')}";
 
-    // Parse the date and time
-    DateTime parsedDate = DateTime.parse(date); // "2024-12-26"
-    DateTime parsedTime = DateFormat.jm().parse(time); // "5:03 AM"
+      // Parse the date and time
+      DateTime parsedDate = DateTime.parse(date); // "2024-12-26"
+      DateTime parsedTime = DateFormat.jm().parse(time); // "5:03 AM"
 
-    // Combine date and time
-    DateTime combinedDateTime = DateTime(
-      parsedDate.year,
-      parsedDate.month,
-      parsedDate.day,
-      parsedTime.hour,
-      parsedTime.minute,
-    );
+      // Combine date and time
+      DateTime combinedDateTime = DateTime(
+        parsedDate.year,
+        parsedDate.month,
+        parsedDate.day,
+        parsedTime.hour,
+        parsedTime.minute,
+      );
 
       await requestsCollection.doc(documentId).set({
         'requestNumber': requestNumber,
         'status': 'In Process', // Default status
         'date': date,
         'timeOfEvent': time,
-        'dateTime': Timestamp.fromDate(combinedDateTime), // Combined date and time
+        'dateTime':
+            Timestamp.fromDate(combinedDateTime), // Combined date and time
         'destination': destination,
         'numberOfBuses': numberOfBuses,
         'assemblyLocation': assemblyLocation,

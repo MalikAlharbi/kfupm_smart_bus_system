@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,6 +32,51 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
   void initState() {
     super.initState();
     Firebase.initializeApp();
+  }
+
+  void _showCupertinoProblemPicker(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 216,
+          padding: const EdgeInsets.only(top: 6.0),
+          margin: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          color: CupertinoColors.systemBackground.resolveFrom(context),
+          child: SafeArea(
+            top: false,
+            child: CupertinoPicker(
+              magnification: 1.22,
+              squeeze: 1.2,
+              useMagnifier: true,
+              itemExtent: 32.0,
+              onSelectedItemChanged: (int selectedItem) {
+                setState(() {
+                  _selectedProblemType = [
+                    'Non-Technical Problem',
+                    'Technical Problem'
+                  ][selectedItem];
+                  isVisible = _selectedProblemType == "Technical Problem"
+                      ? false
+                      : true;
+                });
+              },
+              children: ['Non-Technical Problem', 'Technical Problem']
+                  .map<Widget>((String value) {
+                return Center(
+                  child: Text(
+                    value,
+                    style: const TextStyle(fontSize: 22.0),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void _showSuccessDialog(BuildContext context) {
@@ -116,34 +162,60 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
         padding: const EdgeInsets.all(27.0),
         child: Column(
           children: [
-            DropdownButtonFormField<String>(
-              decoration: const InputDecoration(
-                labelText: 'Problem Type',
-                labelStyle: TextStyle(
-                  fontSize: 19,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(16),
+            // Platform-specific dropdown
+            Platform.isIOS
+                ? GestureDetector(
+                    onTap: () => _showCupertinoProblemPicker(context),
+                    child: InputDecorator(
+                      decoration: const InputDecoration(
+                        labelText: 'Problem Type',
+                        labelStyle: TextStyle(
+                          fontSize: 19,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(16),
+                          ),
+                        ),
+                        prefixIcon: Icon(Icons.report_problem_outlined),
+                      ),
+                      child: Text(
+                        _selectedProblemType,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  )
+                : DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(
+                      labelText: 'Problem Type',
+                      labelStyle: TextStyle(
+                        fontSize: 19,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(16),
+                        ),
+                      ),
+                      prefixIcon: Icon(Icons.report_problem_outlined),
+                    ),
+                    value: _selectedProblemType,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedProblemType = newValue!;
+                        isVisible =
+                            newValue == "Technical Problem" ? false : true;
+                      });
+                    },
+                    items: <String>[
+                      'Non-Technical Problem',
+                      'Technical Problem'
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                   ),
-                ),
-                prefixIcon: Icon(Icons.report_problem_outlined),
-              ),
-              value: _selectedProblemType,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedProblemType = newValue!;
-                  isVisible = newValue == "Technical Problem" ? false : true;
-                });
-              },
-              items: <String>['Non-Technical Problem', 'Technical Problem']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
             const SizedBox(height: 20),
             Visibility(
               visible: isVisible,
