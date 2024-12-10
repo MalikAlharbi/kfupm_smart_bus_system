@@ -30,7 +30,7 @@ class _EventsScreenState extends State<EventsScreen> {
       QuerySnapshot snapshot = await _firestore
           .collection('Event')
           .where('status', isEqualTo: 'Approved')
-          //.orderBy('Date', descending: true)
+          .orderBy('dateTime', descending: false)
           .get();
 
       setState(() {
